@@ -1,4 +1,4 @@
-package com.epam.msfrolov.textprocessing.util;
+package com.epam.msfrolov.textprocessing;
 
 
 public class Runner {
