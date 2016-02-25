@@ -12,7 +12,7 @@ public class Char extends Component {
         this.value = value;
     }
 
-    public static Char newChar(char value){
+    public static Char create(char value){
         Char character = new Char(value);
         character.setType(checkType(value));
         return character;
@@ -33,6 +33,6 @@ public class Char extends Component {
 
     @Override
     public StringBuilder toPlainString(StringBuilder sb) {
-        return sb.append(sb);
+        return sb.append(value);
     }
 }
