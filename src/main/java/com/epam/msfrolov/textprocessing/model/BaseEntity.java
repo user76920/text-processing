@@ -1,3 +1,5 @@
+////////////////////////////////////////////////
+/*
 package com.epam.msfrolov.textprocessing.model;
 
 public abstract class BaseEntity {
@@ -31,7 +33,7 @@ public abstract class BaseEntity {
 
     @Override
     public String toString() {
-        return "BaseEntity{" +
+        return "BaseEntity {" +
                 "id=" + id +
                 '}';
     }
@@ -44,3 +46,5 @@ public abstract class BaseEntity {
         return true;
     }
 }
+*/
+////////////////////////////////////////////////////
