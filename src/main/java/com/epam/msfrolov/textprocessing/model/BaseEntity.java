@@ -1,7 +1,5 @@
 package com.epam.msfrolov.textprocessing.model;
 
-import static com.epam.msfrolov.textprocessing.util.Validator.validate;
-
 public abstract class BaseEntity {
     private Integer id;
 
@@ -10,13 +8,13 @@ public abstract class BaseEntity {
     }
 
     public void setId(Integer id) {
-        if (id == null) validate();
+        isNull(id);
         this.id = id;
     }
 
     @Override
     public boolean equals(Object o) {
-        if (o == null) validate();
+        isNull(o);
         if (this == o) return true;
         if (o.getClass() != getClass()) return false;
 
@@ -36,5 +34,13 @@ public abstract class BaseEntity {
         return "BaseEntity{" +
                 "id=" + id +
                 '}';
+    }
+
+    public static boolean isNull(Object o) {
+        if (o == null) {
+            throw new IllegalArgumentException();
+            //return false;
+        }
+        return true;
     }
 }
