@@ -22,10 +22,13 @@ public class Parser {
         regExMap = new HashMap<>();
         regExMap.put(Type.TEXT, "(?<=\\n)");
         regExMap.put(Type.PARAGRAPH, "(?<=[.!?])");
-        String REGEX_SENTENCES_WORD = "((?<=[a-zA-Zа-яА-ЯЁё0-9-_]+)(?=[\\s.,!?~#$%^&*()=+'\":;№@`]+))";
-        String REGEX_SENTENCES_WHITESPACE = "((?=[a-zA-Zа-яА-ЯЁё0-9-_.,!?~#$%^&*()=+'\":;№@`]+)(?<=[\\s]+))";
-        String REGEX_SENTENCES_OTHER = "((?=[a-zA-Zа-яА-ЯЁё0-9-_]+)(?<=[.,!?~#$%^&*()=+'\":;№@`]+))\"";
-        regExMap.put(Type.SENTENCES, REGEX_SENTENCES_WORD + "|" + REGEX_SENTENCES_WHITESPACE + "|" + REGEX_SENTENCES_OTHER);
+        String REGEX_SENTENCES_PART1 = "((?<=[a-zA-Zа-яА-ЯЁё0-9-_]+)(?=[\\s.,!?~#$%^&*()=+'\":;№@`]+))";
+        String REGEX_SENTENCES_PART2 = "((?=[a-zA-Zа-яА-ЯЁё0-9-_.,!?~#$%^&*()=+'\":;№@`]+)(?<=[\\s]+))";
+        String REGEX_SENTENCES_PART3 = "((?=[a-zA-Zа-яА-ЯЁё0-9-_]+)(?<=[.,!?~#$%^&*()=+'\":;№@`]+))\"";
+        String REGEX_SENTENCES_WORD = "([a-zA-Zа-яА-ЯЁё0-9-_]+)";
+        String REGEX_SENTENCES_WHITESPACE = "([\\s]+)";
+        String REGEX_SENTENCES_OTHER = "([.,!?~#$%^&*()=+'\":;№@`]+)";
+        regExMap.put(Type.SENTENCES, REGEX_SENTENCES_PART1 + "|" + REGEX_SENTENCES_PART2 + "|" + REGEX_SENTENCES_PART3);
 
     }
 
