@@ -32,6 +32,7 @@ public class Composite extends Component {
     public StringBuilder toPlainString(StringBuilder sb) {
         for (Component cp : components) {
             cp.toPlainString(sb);
+            System.out.println(sb);
         }
         return sb;
     }

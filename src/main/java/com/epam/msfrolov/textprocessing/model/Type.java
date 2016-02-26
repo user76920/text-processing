@@ -12,10 +12,9 @@ public class Type {
     public static final Type SENTENCES = new Type("SENTENCES");
 
     public static final Type WORD = new Type("WORD");
-    public static final Type LETTER_OR_NUMBER = new Type("LETTER");
+    public static final Type LETTER_OR_NUMBER = new Type("LETTER_OR_NUMBER");
 
     public static final Type NON_WORD = new Type("NON_WORD");
-    public static final Type WHITESPACE = new Type("WHITESPACE");
     public static final Type OTHER_SYMBOL = new Type("OTHER_SYMBOL");
 
     private static List<Type> PERMANENT_INDIVISIBLE_TYPES;
@@ -23,7 +22,6 @@ public class Type {
     static {
         PERMANENT_INDIVISIBLE_TYPES = new ArrayList<>();
         PERMANENT_INDIVISIBLE_TYPES.add(LETTER_OR_NUMBER);
-        PERMANENT_INDIVISIBLE_TYPES.add(WHITESPACE);
         PERMANENT_INDIVISIBLE_TYPES.add(OTHER_SYMBOL);
     }
 

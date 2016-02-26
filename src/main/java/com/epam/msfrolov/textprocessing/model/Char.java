@@ -1,9 +1,7 @@
 package com.epam.msfrolov.textprocessing.model;
 
 import com.epam.msfrolov.textprocessing.util.Handler;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import com.epam.msfrolov.textprocessing.util.Parser;
 
 public class Char extends Component {
     private final char value;
@@ -12,22 +10,23 @@ public class Char extends Component {
         this.value = value;
     }
 
-    public static Char create(char value){
+    public static Char create(char value) {
         Char character = new Char(value);
         character.setType(checkType(value));
+       // Handler.isNull(character.type);
         return character;
     }
 
     private static Type checkType(char symbol) {
-
         /*Pattern pattern = Pattern.compile("[a-zA-Zа-яА-Я0-9]");
         Matcher matcher = pattern.matcher(String.valueOf(symbol));
         if (matcher.find()) return Type.LETTER_OR_NUMBER;
         */
-        if (String.valueOf(symbol).matches("[a-zA-Zа-яА-ЯЁё0-9-_]"))
-            return Type.LETTER_OR_NUMBER;
-        else
+        if (String.valueOf(symbol).matches(Parser.getRegEx(Type.WORD)))
+        return Type.LETTER_OR_NUMBER;
+        if (String.valueOf(symbol).matches(Parser.getRegEx(Type.NON_WORD)))
         return Type.OTHER_SYMBOL;
+        return null;
     }
 
 
