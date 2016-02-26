@@ -24,7 +24,7 @@ public class Char extends Component {
         Matcher matcher = pattern.matcher(String.valueOf(symbol));
         if (matcher.find()) return Type.LETTER_OR_NUMBER;
         */
-        if (String.valueOf(symbol).matches("[a-zA-Zа-яА-ЯЁё0-9]"))
+        if (String.valueOf(symbol).matches("[a-zA-Zа-яА-ЯЁё0-9-_]"))
             return Type.LETTER_OR_NUMBER;
         else
         return Type.OTHER_SYMBOL;

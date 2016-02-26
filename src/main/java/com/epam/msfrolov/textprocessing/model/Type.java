@@ -12,19 +12,17 @@ public class Type {
     public static final Type SENTENCES = new Type("SENTENCES");
 
     public static final Type WORD = new Type("WORD");
-    public static final Type LETTER_OR_NUMBER = new Type("LETTER_OR_NUMBER");
+    public static final Type LETTER_OR_NUMBER = new Type("LETTER");
 
     public static final Type NON_WORD = new Type("NON_WORD");
-    public static final Type PUNCTUATION = new Type("PUNCTUATION");
     public static final Type WHITESPACE = new Type("WHITESPACE");
-    public static final Type OTHER_SYMBOL = new Type("OTHER SYMBOL");
+    public static final Type OTHER_SYMBOL = new Type("OTHER_SYMBOL");
 
     private static List<Type> PERMANENT_INDIVISIBLE_TYPES;
 
     static {
         PERMANENT_INDIVISIBLE_TYPES = new ArrayList<>();
         PERMANENT_INDIVISIBLE_TYPES.add(LETTER_OR_NUMBER);
-        PERMANENT_INDIVISIBLE_TYPES.add(PUNCTUATION);
         PERMANENT_INDIVISIBLE_TYPES.add(WHITESPACE);
         PERMANENT_INDIVISIBLE_TYPES.add(OTHER_SYMBOL);
     }
@@ -49,11 +47,11 @@ public class Type {
 
     private final String name;
 
-    public static boolean isIndivisibleTypes(Type type) {
+    public static boolean isIndivisible(Type type) {
         return INDIVISIBLE_TYPES.contains(type);
     }
 
-    public static boolean addIndivisibleTypes(Type type) {
+    public static boolean addIndivisible(Type type) {
         if (!PERMANENT_NON_INDIVISIBLE_TYPES.contains(type)
                 && !PERMANENT_INDIVISIBLE_TYPES.contains(type)) {
             INDIVISIBLE_TYPES.add(type);
@@ -76,9 +74,8 @@ public class Type {
 
     @Override
     public boolean equals(Object o) {
-        Handler.isNull(o);
         if (this == o) return true;
-        if (getClass() != o.getClass()) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Type type = (Type) o;
 
