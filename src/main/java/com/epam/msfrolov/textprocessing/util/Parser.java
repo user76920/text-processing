@@ -6,12 +6,12 @@ import com.epam.msfrolov.textprocessing.model.Type;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Properties;
 
-import static com.epam.msfrolov.textprocessing.model.Char.CharType.PUNCTUATION;
-import static com.epam.msfrolov.textprocessing.model.Char.CharType.SYMBOL;
-import static com.epam.msfrolov.textprocessing.model.Char.CharType.WHITESPACE;
+import static com.epam.msfrolov.textprocessing.model.Char.CharType.*;
 import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.*;
 
 public class Parser {
@@ -30,13 +30,16 @@ public class Parser {
     private static Map<Type, String> regExMap;
 
     static {
-        String REGEX_TEXT = "(?<=\\n)";
-        String REGEX_PARAGRAPH = "(?<=[.!?])";
-        String REGEX_SENTENCES = "(?<=[\\s.!?,:\"';()\\[\\]\\{\\}]+)";
-        String REGEX_WORD = "([\\s.!?,:\"';()\\[\\]\\{\\}])";
-        String REGEX_PUNCTUATION = "([.!?,:\"';()\\[\\]\\{\\}])";
-        String REGEX_WHITESPACE = "(\\s)";
-        String REGEX_SYMBOL = "([a-zA-Zа-яА-ЯЁё0-9])";
+        String REGEX_TEXT = getRegexTypeFromProperty("REGEX_TEXT");
+        String REGEX_PARAGRAPH = getRegexTypeFromProperty("REGEX_PARAGRAPH");
+        String REGEX_SENTENCES = getRegexTypeFromProperty("REGEX_SENTENCES");
+        String REGEX_WORD = getRegexTypeFromProperty("REGEX_WORD");
+        String REGEX_PUNCTUATION = getRegexTypeFromProperty("REGEX_PUNCTUATION");
+        String REGEX_WHITESPACE = getRegexTypeFromProperty("REGEX_WHITESPACE");
+        String REGEX_SYMBOL = getRegexTypeFromProperty("REGEX_SYMBOL");;
+
+
+
 
         LOG.info(REGEX_TEXT);
 
@@ -50,18 +53,28 @@ public class Parser {
         regExMap.put(SYMBOL, REGEX_SYMBOL);
     }
 
+    private static String getRegexTypeFromProperty(String propertyKey) {
+        Properties regexProperties = new Properties();
+        try {
+            regexProperties.load(Parser.class.getClassLoader().getResourceAsStream("regExType.properties"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String propertyValue = regexProperties.getProperty(propertyKey);
+        return propertyValue;
+    }
 
     private static Composite parseComposite(String string, Type type) {
         Composite composite = Composite.create(type);
-        String[] strings = string.split(getRegEx(type));
-        Type typeForComponent = getNextType(type);
+        String[] strings = string.split(getRegex(type));
+        Type typeForComponent = getTypeHeir(type);
         for (String s : strings) {
             if (typeForComponent != null) {
                 Composite parseComposite = parseComposite(s, typeForComponent);
                 composite.add(parseComposite);
             } else {
                 Composite parseComposite = parseComponent(s);
-               // Handler.isNull(parseComposite);  //?
+                // Handler.isNull(parseComposite);  //?
                 composite.add(parseComposite);
             }
         }
@@ -69,10 +82,10 @@ public class Parser {
     }
 
     private static Composite parseComponent(String s) {
-        if (s.matches(getRegEx(Type.WORD))) {
+        if (s.matches(getRegex(Type.WORD))) {
             return parseChar(s, Type.WORD);
         }
-        if (s.matches(getRegEx(Type.NON_WORD))) {
+        if (s.matches(getRegex(Type.NON_WORD))) {
             return parseChar(s, Type.NON_WORD);
         }
         return null;
@@ -82,7 +95,7 @@ public class Parser {
         char[] chars = s.toCharArray();
         Composite composite = Composite.create(type);
         Type charType = getNextType(type);
-        for (char ch:chars){
+        for (char ch : chars) {
             Char newChar = Char.create(ch);
             composite.add(newChar);
         }
@@ -95,7 +108,7 @@ public class Parser {
         return typeMap.get(type);
     }
 
-    public static String getRegEx(Type type) {
+    public static String getRegex(Type type) {
         Handler.isNull(type);
         return regExMap.get(type);
     }

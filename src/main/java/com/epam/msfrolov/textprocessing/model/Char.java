@@ -20,11 +20,11 @@ public class Char extends Component {
     }
 
     private static Type checkType(char symbol) {
-        if (String.valueOf(symbol).matches(Parser.getRegEx(PUNCTUATION)))
+        if (String.valueOf(symbol).matches(Parser.getRegex(PUNCTUATION)))
             return PUNCTUATION;
-        if (String.valueOf(symbol).matches(Parser.getRegEx(WHITESPACE)))
+        if (String.valueOf(symbol).matches(Parser.getRegex(WHITESPACE)))
             return WHITESPACE;
-        if (String.valueOf(symbol).matches(Parser.getRegEx(SYMBOL)))
+        if (String.valueOf(symbol).matches(Parser.getRegex(SYMBOL)))
             return SYMBOL;
         else
             return OTHER;
