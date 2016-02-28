@@ -3,6 +3,8 @@ package com.epam.msfrolov.textprocessing.model;
 import com.epam.msfrolov.textprocessing.util.Handler;
 import com.epam.msfrolov.textprocessing.util.Parser;
 
+import static com.epam.msfrolov.textprocessing.model.Char.CharType.*;
+
 public class Char extends Component {
     private final char value;
 
@@ -13,20 +15,19 @@ public class Char extends Component {
     public static Char create(char value) {
         Char character = new Char(value);
         character.setType(checkType(value));
-       // Handler.isNull(character.type);
+        Handler.isNull(character.type);
         return character;
     }
 
     private static Type checkType(char symbol) {
-        /*Pattern pattern = Pattern.compile("[a-zA-Zа-яА-Я0-9]");
-        Matcher matcher = pattern.matcher(String.valueOf(symbol));
-        if (matcher.find()) return Type.LETTER_OR_NUMBER;
-        */
-        if (String.valueOf(symbol).matches(Parser.getRegEx(Type.WORD)))
-        return Type.LETTER_OR_NUMBER;
-        if (String.valueOf(symbol).matches(Parser.getRegEx(Type.NON_WORD)))
-        return Type.OTHER_SYMBOL;
-        return null;
+        if (String.valueOf(symbol).matches(Parser.getRegEx(PUNCTUATION)))
+            return PUNCTUATION;
+        if (String.valueOf(symbol).matches(Parser.getRegEx(WHITESPACE)))
+            return WHITESPACE;
+        if (String.valueOf(symbol).matches(Parser.getRegEx(SYMBOL)))
+            return SYMBOL;
+        else
+            return OTHER;
     }
 
 
@@ -36,7 +37,7 @@ public class Char extends Component {
     }
 
     public enum CharType implements Type {
-        WHITESPACE, PUNCTUATION,OTHER
+        SYMBOL, WHITESPACE, PUNCTUATION, OTHER
     }
 
 }

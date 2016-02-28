@@ -9,6 +9,11 @@ import org.slf4j.LoggerFactory;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.epam.msfrolov.textprocessing.model.Char.CharType.PUNCTUATION;
+import static com.epam.msfrolov.textprocessing.model.Char.CharType.SYMBOL;
+import static com.epam.msfrolov.textprocessing.model.Char.CharType.WHITESPACE;
+import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.*;
+
 public class Parser {
 
     private static final Logger LOG = LoggerFactory.getLogger(Parser.class.getName());
@@ -17,10 +22,9 @@ public class Parser {
 
     static {
         typeMap = new HashMap<>();
-        typeMap.put(Type.TEXT, Type.PARAGRAPH);
-        typeMap.put(Type.PARAGRAPH, Type.SENTENCES);
-        typeMap.put(Type.WORD, Type.LETTER_OR_NUMBER);
-        typeMap.put(Type.NON_WORD, Type.OTHER_SYMBOL);
+        typeMap.put(TEXT, PARAGRAPH);
+        typeMap.put(PARAGRAPH, SENTENCE);
+        typeMap.put(SENTENCE, WORD);
     }
 
     private static Map<Type, String> regExMap;
@@ -28,19 +32,22 @@ public class Parser {
     static {
         String REGEX_TEXT = "(?<=\\n)";
         String REGEX_PARAGRAPH = "(?<=[.!?])";
-        String REGEX_SENTENCES = "((?<=[a-zA-Zа-яА-ЯЁё0-9-_]+)(?=[\\s\t\n ,.!?~#$%^&*()=+'\":;№@`]+))"
-                + "((?=[a-zA-Zа-яА-ЯЁё0-9-_]+)(?<=[\\s\t\n ,.!?~#$%^&*()=+'\":;№@`]+))";
-        String REGEX_SENTENCES_WORD = "([a-zA-Zа-яА-ЯЁё0-9-_]+)";
-        String REGEX_SENTENCES_OTHER = "([\\s\t\n,.!?~#$%^&*()=+'\":;№@`]+)";
+        String REGEX_SENTENCES = "(?<=[\\s.!?,:\"';()\\[\\]\\{\\}]+)";
+        String REGEX_WORD = "([\\s.!?,:\"';()\\[\\]\\{\\}])";
+        String REGEX_PUNCTUATION = "([.!?,:\"';()\\[\\]\\{\\}])";
+        String REGEX_WHITESPACE = "(\\s)";
+        String REGEX_SYMBOL = "([a-zA-Zа-яА-ЯЁё0-9])";
 
         LOG.info(REGEX_TEXT);
 
         regExMap = new HashMap<>();
-        regExMap.put(Type.TEXT, REGEX_TEXT);
-        regExMap.put(Type.PARAGRAPH, REGEX_PARAGRAPH);
-        regExMap.put(Type.SENTENCES, REGEX_SENTENCES);
-        regExMap.put(Type.WORD, REGEX_SENTENCES_WORD);
-        regExMap.put(Type.NON_WORD, REGEX_SENTENCES_OTHER);
+        regExMap.put(TEXT, REGEX_TEXT);
+        regExMap.put(PARAGRAPH, REGEX_PARAGRAPH);
+        regExMap.put(SENTENCE, REGEX_SENTENCES);
+        regExMap.put(WORD, REGEX_WORD);
+        regExMap.put(PUNCTUATION, REGEX_PUNCTUATION);
+        regExMap.put(WHITESPACE, REGEX_WHITESPACE);
+        regExMap.put(SYMBOL, REGEX_SYMBOL);
     }
 
 
@@ -83,7 +90,7 @@ public class Parser {
     }
 
 
-    public static Type getNextType(Type type) {
+    public static Type getTypeHeir(Type type) {
         Handler.isNull(type);
         return typeMap.get(type);
     }

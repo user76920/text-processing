@@ -12,8 +12,8 @@ public class ParserTest {
 
     @Test
     public void testGetNextType() throws Exception {
-        assertEquals(PARAGRAPH, Parser.getNextType(TEXT));
-        assertEquals(SENTENCE, Parser.getNextType(PARAGRAPH));
+        assertEquals(PARAGRAPH, Parser.getTypeHeir(TEXT));
+        assertEquals(SENTENCE, Parser.getTypeHeir(PARAGRAPH));
     }
 
 
@@ -29,8 +29,7 @@ public class ParserTest {
                 "уется. Код будет тяжело поддерживать. ";
 
         Composite text = Parser.parse(testString);
-        StringBuilder stringBuilder = text.toPlainString(new StringBuilder());
-        assertEquals(testString, stringBuilder.toString());
+        assertEquals(testString, text.toPlainString());
 
     }
 }
