@@ -34,4 +34,9 @@ public class Char extends Component {
     public StringBuilder toPlainString(StringBuilder sb) {
         return sb.append(value);
     }
+
+    public enum CharType implements Type {
+        WHITESPACE, PUNCTUATION,OTHER
+    }
+
 }

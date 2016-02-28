@@ -28,6 +28,10 @@ public class Composite extends Component {
         components.add(cp);
     }
 
+    public StringBuilder toPlainString() {
+
+    }
+
     @Override
     public StringBuilder toPlainString(StringBuilder sb) {
         for (Component cp : components) {
@@ -36,4 +40,9 @@ public class Composite extends Component {
         }
         return sb;
     }
+
+    public enum CompositeType implements Type{
+        TEXT, PARAGRAPH,SENTENCE
+    }
+
 }

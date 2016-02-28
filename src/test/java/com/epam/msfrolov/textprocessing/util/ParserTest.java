@@ -4,6 +4,7 @@ import com.epam.msfrolov.textprocessing.model.Composite;
 import com.epam.msfrolov.textprocessing.model.Type;
 import org.junit.Test;
 
+import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.*;
 import static org.junit.Assert.*;
 
 public class ParserTest {
@@ -11,8 +12,8 @@ public class ParserTest {
 
     @Test
     public void testGetNextType() throws Exception {
-        assertEquals(Type.PARAGRAPH, Parser.getNextType(Type.TEXT));
-        assertEquals(Type.SENTENCES, Parser.getNextType(Type.PARAGRAPH));
+        assertEquals(PARAGRAPH, Parser.getNextType(TEXT));
+        assertEquals(SENTENCE, Parser.getNextType(PARAGRAPH));
     }
 
 
