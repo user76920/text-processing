@@ -1,19 +1,23 @@
 package com.epam.msfrolov.textprocessing.model;
 
+import com.epam.msfrolov.textprocessing.util.Checker;
+
 import java.util.ArrayList;
 import java.util.List;
 
 import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.*;
 
 public class Composite extends Component {
+
+    private CompositeType type;
     private List<Component> components;
 
-    private Composite(Type type) {
+    private Composite(CompositeType type) {
         this.components = new ArrayList<>();
         this.setType(type);
     }
 
-    public static Composite create(Type type) {
+    public static Composite create(CompositeType type) {
         return new Composite(type);
     }
 
@@ -21,8 +25,22 @@ public class Composite extends Component {
         return create(TEXT);
     }
 
+    public CompositeType getType() {
+        Checker.isNull(type);
+        return type;
+    }
+
+    private void setType(CompositeType type) {
+        Checker.isNull(type);
+        this.type = type;
+    }
+
     public void add(Component component) {
         components.add(component);
+    }
+
+    //TODO implemetn method
+    public void remove() {
     }
 
     public String toPlainString() {
@@ -39,7 +57,7 @@ public class Composite extends Component {
         return builder;
     }
 
-    public enum CompositeType implements Type {
+    public enum CompositeType {
         TEXT, PARAGRAPH, SENTENCE, WORD
     }
 

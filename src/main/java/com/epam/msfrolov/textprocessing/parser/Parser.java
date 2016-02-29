@@ -1,5 +1,6 @@
 package com.epam.msfrolov.textprocessing.parser;
 
+import com.epam.msfrolov.textprocessing.model.Component;
 import com.epam.msfrolov.textprocessing.model.Composite;
 import com.epam.msfrolov.textprocessing.model.Type;
 import com.epam.msfrolov.textprocessing.util.Checker;
@@ -29,36 +30,10 @@ public class Parser {
         typeMap.put(PARAGRAPH, SENTENCE);
     }
 
-    private static Map<Type, String> regExMap;
-
-    static {
-        String REGEX_TEXT = getRegexTypeFromProperty("text");
-        String REGEX_PARAGRAPH = getRegexTypeFromProperty("paragraph");
-        String REGEX_SENTENCES = getRegexTypeFromProperty("sentences");
-        String REGEX_WORD = getRegexTypeFromProperty("word");
-        String REGEX_PUNCTUATION = getRegexTypeFromProperty("punctuation");
+    private Map<Composite.CompositeType, String> regExMap;
 
 
-        regExMap = new HashMap<>();
-        regExMap.put(TEXT, REGEX_TEXT);
-        regExMap.put(PARAGRAPH, REGEX_PARAGRAPH);
-        regExMap.put(SENTENCE, REGEX_SENTENCES);
-        regExMap.put(WORD, REGEX_WORD);
-        regExMap.put(PUNCTUATION, REGEX_PUNCTUATION);
-    }
-
-    private static String getRegexTypeFromProperty(String propertyKey) {
-        Properties regexProperties = new Properties();
-        try {
-            regexProperties.load(Parser.class.getClassLoader().getResourceAsStream("regExType.properties"));
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        String propertyValue = regexProperties.getProperty(propertyKey);
-        return propertyValue;
-    }
-
-    private static Composite parse(String string, Type type) {
+    private static Composite parse(String string, CompositeType type) {
         Composite composite = Composite.create(type);
         String[] strings = string.split(getRegex(type));
         Type typeForComponent = getTypeHeir(type);

@@ -8,8 +8,20 @@ import org.slf4j.LoggerFactory;
 import static com.epam.msfrolov.textprocessing.model.Char.CharType.*;
 
 public class Char extends Component {
+
+    private CharType type;
     private final char value;
     private static Logger LOG = LoggerFactory.getLogger(Char.class.getName());
+
+    public CharType getType() {
+        Checker.isNull(type);
+        return type;
+    }
+
+    protected void setType(CharType type) {
+        Checker.isNull(type);
+        this.type = type;
+    }
 
     private Char(char value) {
         this.value = value;
@@ -22,7 +34,7 @@ public class Char extends Component {
         return character;
     }
 
-    private static Type checkType(char symbol) {
+    private static CharType checkType(char symbol) {
         if (String.valueOf(symbol).matches(Parser.getRegex(PUNCTUATION)))
             return PUNCTUATION;
         if (Character.isWhitespace(symbol))
@@ -35,13 +47,12 @@ public class Char extends Component {
             return OTHER;
     }
 
-
     @Override
     public StringBuilder toPlainString(StringBuilder sb) {
         return sb.append(value);
     }
 
-    public enum CharType implements Type {
+    public enum CharType {
         LETTER, DIGIT, WHITESPACE, PUNCTUATION, OTHER
     }
 
