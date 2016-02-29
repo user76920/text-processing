@@ -1,6 +1,8 @@
 package com.epam.msfrolov.textprocessing.model;
 
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,12 +12,18 @@ import static org.junit.Assert.*;
 
 public class CharTest {
 
+    private static Logger LOG = LoggerFactory.getLogger(CharTest.class);
+
     @Test
     public void testCheckType() throws Exception {
-        char[] symbol = {'J', 'u', 'Й', 'ё', '0'};
-        char[] other = {'~', ' ', '\n', '&', '.', ',', '?', '!'};
+        char[] symbol = {'J', 'u', 'Й', 'ё',};
+        char[] digit = {'0', '5', '9'};
+        char[] whitespace = {' ', '\n'};
+        char[] other = {'~', '&', '.', ',', '?', '!'};
 
-        assertSymbol(symbol, SYMBOL);
+        assertSymbol(symbol, LETTER);
+        assertSymbol(digit, DIGIT);
+        assertSymbol(whitespace, WHITESPACE);
         assertSymbol(other, OTHER);
     }
 

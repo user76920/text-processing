@@ -10,6 +10,7 @@ import static com.epam.msfrolov.textprocessing.model.Char.CharType.*;
 public class Char extends Component {
     private final char value;
     private static Logger LOG = LoggerFactory.getLogger(Char.class.getName());
+
     private Char(char value) {
         this.value = value;
     }
@@ -22,15 +23,14 @@ public class Char extends Component {
     }
 
     private static Type checkType(char symbol) {
-        LOG.info(String.valueOf(String.valueOf(symbol).matches(Parser.getRegex(SYMBOL))));
-        LOG.info(String.valueOf(symbol));
-
         if (String.valueOf(symbol).matches(Parser.getRegex(PUNCTUATION)))
             return PUNCTUATION;
-        if (String.valueOf(symbol).matches(Parser.getRegex(WHITESPACE)))
+        if (Character.isWhitespace(symbol))
             return WHITESPACE;
-        if (String.valueOf(symbol).matches(Parser.getRegex(SYMBOL)))
-            return SYMBOL;
+        if (Character.isLetter(symbol))
+            return LETTER;
+        if (Character.isDigit(symbol))
+            return DIGIT;
         else
             return OTHER;
     }
@@ -42,7 +42,7 @@ public class Char extends Component {
     }
 
     public enum CharType implements Type {
-        SYMBOL, WHITESPACE, PUNCTUATION, OTHER
+        LETTER, DIGIT, WHITESPACE, PUNCTUATION, OTHER
     }
 
 }

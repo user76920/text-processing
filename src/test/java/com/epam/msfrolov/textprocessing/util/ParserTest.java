@@ -1,7 +1,6 @@
 package com.epam.msfrolov.textprocessing.util;
 
 import com.epam.msfrolov.textprocessing.model.Composite;
-import com.epam.msfrolov.textprocessing.model.Type;
 import org.junit.Test;
 
 import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.*;

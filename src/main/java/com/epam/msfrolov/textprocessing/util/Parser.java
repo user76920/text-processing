@@ -15,11 +15,14 @@ import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.*;
 
 public class Parser {
 
-    //private static final Logger LOG = LoggerFactory.getLogger(Parser.class.getName());
+    private static final Logger LOG = LoggerFactory.getLogger(Parser.class.getName());
 
     private static Map<Type, Type> typeMap;
 
     static {
+
+        LOG.info("");
+
         typeMap = new HashMap<>();
         typeMap.put(TEXT, PARAGRAPH);
         typeMap.put(PARAGRAPH, SENTENCE);
@@ -33,8 +36,7 @@ public class Parser {
         String REGEX_SENTENCES = getRegexTypeFromProperty("REGEX_SENTENCES");
         String REGEX_WORD = getRegexTypeFromProperty("REGEX_WORD");
         String REGEX_PUNCTUATION = getRegexTypeFromProperty("REGEX_PUNCTUATION");
-        String REGEX_WHITESPACE = getRegexTypeFromProperty("REGEX_WHITESPACE");
-        String REGEX_SYMBOL = getRegexTypeFromProperty("REGEX_SYMBOL");
+
 
         regExMap = new HashMap<>();
         regExMap.put(TEXT, REGEX_TEXT);
@@ -42,8 +44,6 @@ public class Parser {
         regExMap.put(SENTENCE, REGEX_SENTENCES);
         regExMap.put(WORD, REGEX_WORD);
         regExMap.put(PUNCTUATION, REGEX_PUNCTUATION);
-        regExMap.put(WHITESPACE, REGEX_WHITESPACE);
-        regExMap.put(SYMBOL, REGEX_SYMBOL);
     }
 
     private static String getRegexTypeFromProperty(String propertyKey) {
@@ -61,16 +61,16 @@ public class Parser {
         Composite composite = Composite.create(type);
         String[] strings = string.split(getRegex(type));
         Type typeForComponent = getTypeHeir(type);
-        //LOG.info(typeForComponent.toString());
+        LOG.info("typeForComponent " + String.valueOf(typeForComponent));
         if (type != null) {
+            LOG.info("МЫ ТАМА");
             for (String componentString : strings) {
                 Composite parseComposite = parse(componentString, typeForComponent);
                 composite.add(parseComposite);
             }
         } else {
-            //LOG.info("МЫ ТУТА");
+            LOG.info("МЫ ТУТА");
         }
-
         return composite;
     }
 
