@@ -8,17 +8,17 @@ import org.slf4j.LoggerFactory;
 import static com.epam.msfrolov.textprocessing.model.Char.CharType.*;
 
 public class Char extends Component {
+    private static Logger LOG = LoggerFactory.getLogger(Char.class.getName());
 
     private CharType type;
     private final char value;
-    private static Logger LOG = LoggerFactory.getLogger(Char.class.getName());
 
     public CharType getType() {
         Checker.isNull(type);
         return type;
     }
 
-    protected void setType(CharType type) {
+    private void setType(CharType type) {
         Checker.isNull(type);
         this.type = type;
     }
@@ -35,7 +35,7 @@ public class Char extends Component {
     }
 
     private static CharType checkType(char symbol) {
-        if (String.valueOf(symbol).matches(Parser.getRegex(PUNCTUATION)))
+        if (String.valueOf(symbol).matches("([.!?,:\"';()\\[\\]\\{\\}])"))
             return PUNCTUATION;
         if (Character.isWhitespace(symbol))
             return WHITESPACE;

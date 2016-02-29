@@ -9,11 +9,15 @@ public class CompositeTest {
     @Test
     public void testToPlainString() throws Exception {
 
+        //GIVEN
         String testString = "Слово не воробей, вылетит не поймаешь!";
-        char[] chars = testString.toCharArray();
 
+        //WHEN
+        char[] chars = testString.toCharArray();
         Composite composite = createCompositeForTest(chars);
         String testCompositeString = composite.toPlainString(new StringBuilder()).toString();
+
+        //THEN
         assertEquals(testString, testCompositeString);
     }
 

@@ -1,8 +1,7 @@
 package com.epam.msfrolov.textprocessing.parser;
 
-import com.epam.msfrolov.textprocessing.model.Component;
 import com.epam.msfrolov.textprocessing.model.Composite;
-import com.epam.msfrolov.textprocessing.model.Type;
+import com.epam.msfrolov.textprocessing.model.Composite.CompositeType;
 import com.epam.msfrolov.textprocessing.util.Checker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,57 +11,112 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import static com.epam.msfrolov.textprocessing.model.Char.CharType.*;
 import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.*;
 
 public class Parser {
 
     private static final Logger LOG = LoggerFactory.getLogger(Parser.class.getName());
 
-    private static Map<Type, Type> typeMap;
+    private Map<CompositeType, CompositeType> typeMap;
+    private Map<CompositeType, String> regexMap;
 
-    static {
-
-        LOG.info("");
-
-        typeMap = new HashMap<>();
-        typeMap.put(TEXT, PARAGRAPH);
-        typeMap.put(PARAGRAPH, SENTENCE);
+    private Parser() {
+        this.typeMap = initializationTypeMap();
+        this.regexMap = RegexArgument.getRegexFromProperty();
     }
 
-    private Map<Composite.CompositeType, String> regExMap;
+    private Parser(Map<CompositeType, String> regexMap) {
+        this.typeMap = initializationTypeMap();
+        this.regexMap = regexMap;
+    }
 
+    public static Parser create() {
+        return new Parser();
+    }
 
-    private static Composite parse(String string, CompositeType type) {
+    public static Parser create(Map<CompositeType, String> regexMap) {
+        return new Parser(regexMap);
+    }
+
+    private Map<CompositeType, CompositeType> initializationTypeMap() {
+        Map<CompositeType, CompositeType> typeMap = new HashMap<>();
+        typeMap.put(TEXT, PARAGRAPH);
+        typeMap.put(PARAGRAPH, SENTENCE);
+        return typeMap;
+    }
+
+    private Composite parse(String string, CompositeType type) {
+        LOG.debug("************************************************");
+        LOG.debug("------------------------------------------------");
+        LOG.debug("type {}",type);
         Composite composite = Composite.create(type);
         String[] strings = string.split(getRegex(type));
-        Type typeForComponent = getTypeHeir(type);
-        LOG.info("typeForComponent " + String.valueOf(typeForComponent));
-        if (type != null) {
-            LOG.info("type != null");
+        CompositeType typeForComponent = getSubType(type);
+        LOG.debug("typeForComponent {}", typeForComponent);
+        if (typeForComponent != null) {
+            LOG.debug("type != null");
             for (String componentString : strings) {
+                LOG.debug("componentString *|{}|*", componentString);
                 Composite parseComposite = parse(componentString, typeForComponent);
                 composite.add(parseComposite);
             }
         } else {
-            LOG.info("type == null");
+            LOG.debug("type == null");
+            for (String componentString : strings) {
+                LOG.debug("componentString *|{}|*", componentString);
+//                Composite parseComposite = parse(componentString, typeForComponent);
+//                composite.add(parseComposite);
+            }
         }
+        LOG.debug("------------------------------------------------");
+        LOG.debug("************************************************");
         return composite;
     }
 
-    public static Type getTypeHeir(Type type) {
-        Checker.isNull(type);
-        return typeMap.get(type);
-    }
-
-    public static String getRegex(Type type) {
-        Checker.isNull(type);
-        return regExMap.get(type);
-    }
-
-    public static Composite parse(String string) {
+    public Composite parse(String string) {
         Checker.isNull(string);
+        LOG.debug("");
         return parse(string, TEXT);
     }
 
+    public CompositeType getSubType(CompositeType type) {
+        Checker.isNull(type);
+        return typeMap.get(type);
+    }
+//TODO oneline
+    public String getRegex(CompositeType type) {
+        Checker.isNull(type);
+        String s = regexMap.get(type);
+        LOG.debug("*********|" + s + "|*********");
+        return s;
+    }
+
+    static class RegexArgument {
+
+        private static Logger LOG = LoggerFactory.getLogger(RegexArgument.class.getName());
+
+        public static Map<CompositeType, String> getRegexFromProperty() {
+            Map<CompositeType, String> regexMap = new HashMap<>();
+            String text = getRegexTypeFromProperty("text");
+            String paragraph = getRegexTypeFromProperty("paragraph");
+            String sentences = getRegexTypeFromProperty("sentences");
+            String word = getRegexTypeFromProperty("word");
+            regexMap.put(TEXT, text);
+            regexMap.put(PARAGRAPH, paragraph);
+            regexMap.put(SENTENCE, sentences);
+            regexMap.put(WORD, word);
+            return regexMap;
+        }
+
+        private static String getRegexTypeFromProperty(String propertyKey) {
+            Properties regexProperties = new Properties();
+            try {
+                regexProperties.load(RegexArgument.class.getClassLoader().getResourceAsStream("regExType.properties"));
+            } catch (IOException e) {
+                LOG.error("Property with RegEx arguments was not read!", e);
+            }
+            return regexProperties.getProperty(propertyKey);
+        }
+
+    }
 }
