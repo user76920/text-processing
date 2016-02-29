@@ -4,10 +4,10 @@ import org.junit.Test;
 
 import static org.junit.Assert.*;
 
-public class HandlerTest {
+public class CheckerTest {
 
     @Test
     public void testIsNull() throws Exception {
-        assertEquals(false, Handler.isNull(new Integer(42)));
+        assertEquals(false, Checker.isNull(new Integer(42)));
     }
 }

@@ -1,7 +1,7 @@
 package com.epam.msfrolov.textprocessing.model;
 
-import com.epam.msfrolov.textprocessing.util.Handler;
-import com.epam.msfrolov.textprocessing.util.Parser;
+import com.epam.msfrolov.textprocessing.util.Checker;
+import com.epam.msfrolov.textprocessing.parser.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,7 +18,7 @@ public class Char extends Component {
     public static Char create(char value) {
         Char character = new Char(value);
         character.setType(checkType(value));
-        Handler.isNull(character.type);
+        Checker.isNull(character.type);
         return character;
     }
 

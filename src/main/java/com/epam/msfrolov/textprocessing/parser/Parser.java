@@ -1,7 +1,8 @@
-package com.epam.msfrolov.textprocessing.util;
+package com.epam.msfrolov.textprocessing.parser;
 
 import com.epam.msfrolov.textprocessing.model.Composite;
 import com.epam.msfrolov.textprocessing.model.Type;
+import com.epam.msfrolov.textprocessing.util.Checker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -31,11 +32,11 @@ public class Parser {
     private static Map<Type, String> regExMap;
 
     static {
-        String REGEX_TEXT = getRegexTypeFromProperty("REGEX_TEXT");
-        String REGEX_PARAGRAPH = getRegexTypeFromProperty("REGEX_PARAGRAPH");
-        String REGEX_SENTENCES = getRegexTypeFromProperty("REGEX_SENTENCES");
-        String REGEX_WORD = getRegexTypeFromProperty("REGEX_WORD");
-        String REGEX_PUNCTUATION = getRegexTypeFromProperty("REGEX_PUNCTUATION");
+        String REGEX_TEXT = getRegexTypeFromProperty("text");
+        String REGEX_PARAGRAPH = getRegexTypeFromProperty("paragraph");
+        String REGEX_SENTENCES = getRegexTypeFromProperty("sentences");
+        String REGEX_WORD = getRegexTypeFromProperty("word");
+        String REGEX_PUNCTUATION = getRegexTypeFromProperty("punctuation");
 
 
         regExMap = new HashMap<>();
@@ -75,17 +76,17 @@ public class Parser {
     }
 
     public static Type getTypeHeir(Type type) {
-        Handler.isNull(type);
+        Checker.isNull(type);
         return typeMap.get(type);
     }
 
     public static String getRegex(Type type) {
-        Handler.isNull(type);
+        Checker.isNull(type);
         return regExMap.get(type);
     }
 
     public static Composite parse(String string) {
-        Handler.isNull(string);
+        Checker.isNull(string);
         return parse(string, TEXT);
     }
 
