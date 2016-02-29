@@ -63,13 +63,13 @@ public class Parser {
         Type typeForComponent = getTypeHeir(type);
         LOG.info("typeForComponent " + String.valueOf(typeForComponent));
         if (type != null) {
-            LOG.info("МЫ ТАМА");
+            LOG.info("type != null");
             for (String componentString : strings) {
                 Composite parseComposite = parse(componentString, typeForComponent);
                 composite.add(parseComposite);
             }
         } else {
-            LOG.info("МЫ ТУТА");
+            LOG.info("type == null");
         }
         return composite;
     }
