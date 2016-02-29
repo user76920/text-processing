@@ -1,6 +1,5 @@
 package com.epam.msfrolov.textprocessing.util;
 
-import com.epam.msfrolov.textprocessing.model.Char;
 import com.epam.msfrolov.textprocessing.model.Composite;
 import com.epam.msfrolov.textprocessing.model.Type;
 import org.slf4j.Logger;
@@ -16,7 +15,7 @@ import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.*;
 
 public class Parser {
 
-    private static final Logger LOG = LoggerFactory.getLogger(Parser.class.getName());
+    //private static final Logger LOG = LoggerFactory.getLogger(Parser.class.getName());
 
     private static Map<Type, Type> typeMap;
 
@@ -24,7 +23,6 @@ public class Parser {
         typeMap = new HashMap<>();
         typeMap.put(TEXT, PARAGRAPH);
         typeMap.put(PARAGRAPH, SENTENCE);
-        typeMap.put(SENTENCE, WORD);
     }
 
     private static Map<Type, String> regExMap;
@@ -36,12 +34,7 @@ public class Parser {
         String REGEX_WORD = getRegexTypeFromProperty("REGEX_WORD");
         String REGEX_PUNCTUATION = getRegexTypeFromProperty("REGEX_PUNCTUATION");
         String REGEX_WHITESPACE = getRegexTypeFromProperty("REGEX_WHITESPACE");
-        String REGEX_SYMBOL = getRegexTypeFromProperty("REGEX_SYMBOL");;
-
-
-
-
-        LOG.info(REGEX_TEXT);
+        String REGEX_SYMBOL = getRegexTypeFromProperty("REGEX_SYMBOL");
 
         regExMap = new HashMap<>();
         regExMap.put(TEXT, REGEX_TEXT);
@@ -64,44 +57,22 @@ public class Parser {
         return propertyValue;
     }
 
-    private static Composite parseComposite(String string, Type type) {
+    private static Composite parse(String string, Type type) {
         Composite composite = Composite.create(type);
         String[] strings = string.split(getRegex(type));
         Type typeForComponent = getTypeHeir(type);
-        for (String s : strings) {
-            if (typeForComponent != null) {
-                Composite parseComposite = parseComposite(s, typeForComponent);
-                composite.add(parseComposite);
-            } else {
-                Composite parseComposite = parseComponent(s);
-                // Handler.isNull(parseComposite);  //?
+        //LOG.info(typeForComponent.toString());
+        if (type != null) {
+            for (String componentString : strings) {
+                Composite parseComposite = parse(componentString, typeForComponent);
                 composite.add(parseComposite);
             }
+        } else {
+            //LOG.info("МЫ ТУТА");
         }
+
         return composite;
     }
-
-    private static Composite parseComponent(String s) {
-        if (s.matches(getRegex(Type.WORD))) {
-            return parseChar(s, Type.WORD);
-        }
-        if (s.matches(getRegex(Type.NON_WORD))) {
-            return parseChar(s, Type.NON_WORD);
-        }
-        return null;
-    }
-
-    private static Composite parseChar(String s, Type type) {
-        char[] chars = s.toCharArray();
-        Composite composite = Composite.create(type);
-        Type charType = getNextType(type);
-        for (char ch : chars) {
-            Char newChar = Char.create(ch);
-            composite.add(newChar);
-        }
-        return composite;
-    }
-
 
     public static Type getTypeHeir(Type type) {
         Handler.isNull(type);
@@ -115,7 +86,7 @@ public class Parser {
 
     public static Composite parse(String string) {
         Handler.isNull(string);
-        return parseComposite(string, Type.TEXT);
+        return parse(string, TEXT);
     }
 
 }

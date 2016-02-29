@@ -5,17 +5,18 @@ import org.junit.Test;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.epam.msfrolov.textprocessing.model.Char.CharType.*;
 import static org.junit.Assert.*;
 
 public class CharTest {
 
     @Test
     public void testCheckType() throws Exception {
-        char[] letterOrNumber = {'J', 'u', 'Й', 'ё', '0'};
-        char[] otherSymbol = {'~', ' ', '\n', '&', '.', ',', '?', '!'};
+        char[] symbol = {'J', 'u', 'Й', 'ё', '0'};
+        char[] other = {'~', ' ', '\n', '&', '.', ',', '?', '!'};
 
-        assertSymbol(letterOrNumber, Type.LETTER_OR_NUMBER);
-        assertSymbol(otherSymbol, Type.OTHER_SYMBOL);
+        assertSymbol(symbol, SYMBOL);
+        assertSymbol(other, OTHER);
     }
 
     private void assertSymbol(char[] array, Type type) {

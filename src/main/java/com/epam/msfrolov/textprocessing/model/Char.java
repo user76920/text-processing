@@ -2,12 +2,14 @@ package com.epam.msfrolov.textprocessing.model;
 
 import com.epam.msfrolov.textprocessing.util.Handler;
 import com.epam.msfrolov.textprocessing.util.Parser;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.epam.msfrolov.textprocessing.model.Char.CharType.*;
 
 public class Char extends Component {
     private final char value;
-
+    private static Logger LOG = LoggerFactory.getLogger(Char.class.getName());
     private Char(char value) {
         this.value = value;
     }
@@ -20,6 +22,9 @@ public class Char extends Component {
     }
 
     private static Type checkType(char symbol) {
+        LOG.info(String.valueOf(String.valueOf(symbol).matches(Parser.getRegex(SYMBOL))));
+        LOG.info(String.valueOf(symbol));
+
         if (String.valueOf(symbol).matches(Parser.getRegex(PUNCTUATION)))
             return PUNCTUATION;
         if (String.valueOf(symbol).matches(Parser.getRegex(WHITESPACE)))
