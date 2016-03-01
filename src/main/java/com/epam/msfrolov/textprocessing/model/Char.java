@@ -5,6 +5,9 @@ import com.epam.msfrolov.textprocessing.parser.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+
 import static com.epam.msfrolov.textprocessing.model.Char.CharType.*;
 
 public class Char extends Component {
@@ -43,6 +46,8 @@ public class Char extends Component {
             return LETTER;
         if (Character.isDigit(symbol))
             return DIGIT;
+        if (String.valueOf(symbol).matches("([-_])"))
+            return DASH;
         else
             return OTHER;
     }
@@ -53,7 +58,7 @@ public class Char extends Component {
     }
 
     public enum CharType {
-        LETTER, DIGIT, WHITESPACE, PUNCTUATION, OTHER
+        LETTER, DIGIT, WHITESPACE, PUNCTUATION,DASH, OTHER
     }
 
 }

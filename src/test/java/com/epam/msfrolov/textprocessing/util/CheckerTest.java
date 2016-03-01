@@ -1,7 +1,6 @@
 package com.epam.msfrolov.textprocessing.util;
 
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import static org.junit.Assert.*;
 

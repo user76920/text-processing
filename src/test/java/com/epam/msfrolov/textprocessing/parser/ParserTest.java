@@ -1,7 +1,6 @@
 package com.epam.msfrolov.textprocessing.parser;
 
 import com.epam.msfrolov.textprocessing.model.Composite;
-import com.epam.msfrolov.textprocessing.parser.Parser;
 import com.epam.msfrolov.textprocessing.util.TextReader;
 import org.junit.Test;
 
@@ -26,21 +25,5 @@ public class ParserTest {
         Composite text = parser.parse(testString);
         //THEN
         assertEquals(testString, text.toPlainString());
-    }
-
-
-
-    @Test
-    public void test1() throws Exception {
-        Parser parser = Parser.create();
-        String testString = TextReader.read("text");
-        String[] strings = testString.split("(?<=[\\n])");
-
-        for (String s:strings) {
-            System.out.println("---------------------------------------------------------------------");
-            System.out.println(s);
-            System.out.println("---------------------------------------------------------------------");
-        }
-
     }
 }

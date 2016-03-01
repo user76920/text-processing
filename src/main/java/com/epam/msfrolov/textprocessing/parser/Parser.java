@@ -1,7 +1,9 @@
 package com.epam.msfrolov.textprocessing.parser;
 
+import com.epam.msfrolov.textprocessing.model.Char;
 import com.epam.msfrolov.textprocessing.model.Composite;
 import com.epam.msfrolov.textprocessing.model.Composite.CompositeType;
+import com.epam.msfrolov.textprocessing.service.CompositeService;
 import com.epam.msfrolov.textprocessing.util.Checker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -46,9 +48,9 @@ public class Parser {
     }
 
     private Composite parse(String string, CompositeType type) {
-        LOG.debug("************************************************");
-        LOG.debug("------------------------------------------------");
-        LOG.debug("type {}",type);
+        LOG.debug("*******************");
+        LOG.debug("-------------------");
+        LOG.debug("type {}", type);
         Composite composite = Composite.create(type);
         String[] strings = string.split(getRegex(type));
         CompositeType typeForComponent = getSubType(type);
@@ -63,14 +65,38 @@ public class Parser {
         } else {
             LOG.debug("type == null");
             for (String componentString : strings) {
+
                 LOG.debug("componentString *|{}|*", componentString);
-//                Composite parseComposite = parse(componentString, typeForComponent);
-//                composite.add(parseComposite);
+                char[] symbols = componentString.toCharArray();
+                String wordTypeRegex = getRegex(WORD);
+                Composite compositeWord = Composite.create(WORD);
+                for (char symbol : symbols) {
+                    Char symbolObject = Char.create(symbol);
+                    if (isWords(symbolObject)) {
+                        compositeWord.add(symbolObject);
+                    } else {
+                        if (CompositeService.getNumberOfChar(compositeWord) > 0) {
+                            composite.add(compositeWord);
+                            compositeWord = Composite.create(WORD);
+                        }
+                        composite.add(symbolObject);
+                    }
+                    if (CompositeService.getNumberOfChar(compositeWord) > 0) {
+                        composite.add(compositeWord);
+                        compositeWord = Composite.create(WORD);
+                    }
+                }
             }
         }
-        LOG.debug("------------------------------------------------");
-        LOG.debug("************************************************");
+        LOG.debug("*******************");
+        LOG.debug("-------------------");
         return composite;
+    }
+
+    private boolean isWords(Char symbolObject) {
+        return symbolObject.getType() == Char.CharType.LETTER
+                && symbolObject.getType() == Char.CharType.DIGIT
+                && symbolObject.getType() == Char.CharType.DASH;
     }
 
     public Composite parse(String string) {
@@ -83,11 +109,12 @@ public class Parser {
         Checker.isNull(type);
         return typeMap.get(type);
     }
-//TODO oneline
+
+    //TODO oneline
     public String getRegex(CompositeType type) {
         Checker.isNull(type);
         String s = regexMap.get(type);
-        LOG.debug("*********|" + s + "|*********");
+        LOG.debug("REGEX:   |" + s + "|");
         return s;
     }
 
