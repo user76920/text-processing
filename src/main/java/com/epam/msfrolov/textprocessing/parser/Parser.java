@@ -59,7 +59,7 @@ public class Parser {
         } else for (String componentString : strings) {
             Composite compositeWord = Composite.create(WORD);
             char[] symbols = componentString.toCharArray();
-            for (int i = 0; i < symbols.length; i++) {   //create new Char class or use .isSymbolForWord for char;
+            for (int i = 0; i < symbols.length; i++) { //create new Char class and compare type or use .isSymbolForWord for char;
                 if (Char.isSymbolForWord(symbols[i])){
                     compositeWord.add(Char.create(symbols[i]));
                     if (!Char.isSymbolForWord(symbols[i + 1])) composite.add(compositeWord);
