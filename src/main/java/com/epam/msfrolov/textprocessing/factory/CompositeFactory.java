@@ -8,11 +8,12 @@ public class CompositeFactory {
     public static Composite getCompositeText() {
         Parser parser = Parser.create();
         String testString = TextReader.read("text");
-        Composite text = parser.parse(testString);
-        return text;
+        return parser.parse(testString);
     }
 
     public static Composite getRandomSentence() {
-
+        Parser parser = Parser.create();
+        String s = TextReader.getRandomLine();
+        return parser.parse(s);
     }
 }

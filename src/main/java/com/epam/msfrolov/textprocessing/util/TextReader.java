@@ -1,5 +1,8 @@
 package com.epam.msfrolov.textprocessing.util;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
@@ -10,31 +13,29 @@ import java.util.Random;
 import java.util.Scanner;
 
 public class TextReader {
+    private static Logger LOG = LoggerFactory.getLogger(TextReader.class.getName());
     public static Random random = new Random();
 
     public static String read(String path) {
         InputStream inputStream = TextReader.class.getClassLoader().getResourceAsStream(path);
-        String text = new Scanner(inputStream).useDelimiter("\\A").next();
-        return text;
+        return new Scanner(inputStream).useDelimiter("\\A").next();
     }
 
-    private static void readFileToList() {
+    public static String getRandomLine(String fileName) {
         List<String> lines = new ArrayList<>();
         try {
-
             BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
             String line;
             while ((line = bufferedReader.readLine()) != null) {
                 lines.add(line);
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            LOG.error("Unable to read a text file",e);
         }
+        return lines.get(random.nextInt(lines.size()));
     }
-    public static String getRandomLine(String fn) throws IllegalArgumentException {
-        if (fn == null) throw new IllegalArgumentException();
-        fileName = fn;
-        readFileToList();
-        return lines.get(ServiceRandom.random.nextInt(lines.size()));
+    public static String getRandomLine() {
+        return getRandomLine("text");
     }
+
 }
