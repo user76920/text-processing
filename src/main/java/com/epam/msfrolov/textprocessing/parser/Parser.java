@@ -59,12 +59,11 @@ public class Parser {
         } else for (String componentString : strings) {
             Composite compositeWord = Composite.create(WORD);
             char[] symbols = componentString.toCharArray();
-            for (int i = 0; i < symbols.length; i++) {//char symbol : symbols) {
-                Char symbolObject = Char.create(symbols[i]);
-                if (symbolObject.isSymbolForWord()) {
-                    compositeWord.add(symbolObject);
+            for (int i = 0; i < symbols.length; i++) {
+                if (Char.isSymbolForWord(symbols[i])){
+                    compositeWord.add(Char.create(symbols[i]));
                     if (!Char.isSymbolForWord(symbols[i + 1])) composite.add(compositeWord);
-                } else composite.add(symbolObject);
+                } else composite.add(Char.create(symbols[i]));
             }
         }
         return composite;

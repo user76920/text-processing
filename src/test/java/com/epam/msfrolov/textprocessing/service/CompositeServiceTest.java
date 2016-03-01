@@ -15,10 +15,9 @@ public class CompositeServiceTest {
     @Test
     public void shouldGiveNumberOfChar() throws Exception {
 
-        Composite compositeText = CompositeFactory.createCompositeText();
-        LOG.debug("*****///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////");
+        Composite compositeText = CompositeFactory.getCompositeText();
         int numberOfCharInText = CompositeService.getNumberOfChar(compositeText);
-        LOG.debug(String.valueOf(numberOfCharInText));
+        LOG.debug("Number of Char classes into composition = {}",String.valueOf(numberOfCharInText));
         boolean test = false;
         if (numberOfCharInText>0){
             test = true;
