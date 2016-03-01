@@ -57,26 +57,17 @@ public class Parser {
                 composite.add(parseComposite);
             }
         } else for (String componentString : strings) {
-            char[] symbols = componentString.toCharArray();
             Composite compositeWord = Composite.create(WORD);
-            for (char symbol : symbols) {
-                Char symbolObject = Char.create(symbol);
-                if (isWords(symbolObject)) {
+            char[] symbols = componentString.toCharArray();
+            for (int i = 0; i < symbols.length; i++) {//char symbol : symbols) {
+                Char symbolObject = Char.create(symbols[i]);
+                if (symbolObject.isSymbolForWord()) {
                     compositeWord.add(symbolObject);
-                } else {
-                    if (!compositeWord.isEmpty()) composite.add(compositeWord);
-                    composite.add(symbolObject);
-                }
-                if (!compositeWord.isEmpty()) composite.add(compositeWord);
+                    if (!Char.isSymbolForWord(symbols[i + 1])) composite.add(compositeWord);
+                } else composite.add(symbolObject);
             }
         }
         return composite;
-    }
-
-    private boolean isWords(Char symbolObject) {
-        return symbolObject.getType() == Char.CharType.LETTER
-                && symbolObject.getType() == Char.CharType.DIGIT
-                && symbolObject.getType() == Char.CharType.DASH;
     }
 
     public Composite parse(String string) {

@@ -48,6 +48,15 @@ public class Char extends Component {
             return OTHER;
     }
 
+    public boolean isSymbolForWord(){
+        return type == Char.CharType.LETTER
+                || type == Char.CharType.DIGIT
+                || type == Char.CharType.DASH;
+    }
+    public static boolean isSymbolForWord(char value){
+        return  (Character.isLetter(value)||Character.isDigit(value)||String.valueOf(value).matches("([-_])"));
+    }
+
     @Override
     public StringBuilder toPlainString(StringBuilder sb) {
         return sb.append(value);
