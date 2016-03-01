@@ -44,21 +44,20 @@ public class Parser {
         Map<CompositeType, CompositeType> typeMap = new HashMap<>();
         typeMap.put(TEXT, PARAGRAPH);
         typeMap.put(PARAGRAPH, SENTENCE);
+        typeMap.put(SENTENCE, WORD);
         return typeMap;
     }
 
     private Composite parse(String string, CompositeType type) {
-        LOG.debug("*******************");
-        LOG.debug("-------------------");
         LOG.debug("type {}", type);
         Composite composite = Composite.create(type);
         String[] strings = string.split(getRegex(type));
         CompositeType typeForComponent = getSubType(type);
         LOG.debug("typeForComponent {}", typeForComponent);
-        if (typeForComponent != null) {
+        if (typeForComponent == WORD) {
             LOG.debug("type != null");
             for (String componentString : strings) {
-                LOG.debug("componentString *|{}|*", componentString);
+                LOG.debug("componentString {}", componentString);
                 Composite parseComposite = parse(componentString, typeForComponent);
                 composite.add(parseComposite);
             }
@@ -66,7 +65,7 @@ public class Parser {
             LOG.debug("type == null");
             for (String componentString : strings) {
 
-                LOG.debug("componentString *|{}|*", componentString);
+                LOG.debug("componentString {}", componentString);
                 char[] symbols = componentString.toCharArray();
                 String wordTypeRegex = getRegex(WORD);
                 Composite compositeWord = Composite.create(WORD);
@@ -88,8 +87,6 @@ public class Parser {
                 }
             }
         }
-        LOG.debug("*******************");
-        LOG.debug("-------------------");
         return composite;
     }
 
