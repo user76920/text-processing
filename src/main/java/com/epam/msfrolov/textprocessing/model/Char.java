@@ -1,12 +1,8 @@
 package com.epam.msfrolov.textprocessing.model;
 
 import com.epam.msfrolov.textprocessing.util.Checker;
-import com.epam.msfrolov.textprocessing.parser.Parser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-
-import java.util.ArrayList;
-import java.util.Iterator;
 
 import static com.epam.msfrolov.textprocessing.model.Char.CharType.*;
 
@@ -58,7 +54,7 @@ public class Char extends Component {
     }
 
     public enum CharType {
-        LETTER, DIGIT, WHITESPACE, PUNCTUATION,DASH, OTHER
+        LETTER, DIGIT, WHITESPACE, PUNCTUATION, DASH, OTHER
     }
 
 }

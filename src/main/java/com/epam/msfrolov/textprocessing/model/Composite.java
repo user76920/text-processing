@@ -8,7 +8,7 @@ import java.util.List;
 
 import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.*;
 
-public class Composite extends Component implements Iterable<Component>{
+public class Composite extends Component implements Iterable<Component> {
 
     private CompositeType type;
     private List<Component> components;
@@ -27,9 +27,12 @@ public class Composite extends Component implements Iterable<Component>{
         return create(TEXT);
     }
 
-    @Override
-    public Iterator iterator() {
+    public Iterator<Component> iterator() {
         return components.iterator();
+    }
+
+    public boolean isEmpty() {
+        return components.isEmpty();
     }
 
     public CompositeType getType() {
