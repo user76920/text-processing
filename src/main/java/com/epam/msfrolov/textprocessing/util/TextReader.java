@@ -3,10 +3,7 @@ package com.epam.msfrolov.textprocessing.util;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -24,9 +21,10 @@ public class TextReader {
     public static String getRandomLine(String fileName) {
         List<String> lines = new ArrayList<>();
         try {
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(fileName));
+            //BufferedReader br = new BufferedReader(new FileReader(fileName));
+            BufferedReader br =  new BufferedReader(new InputStreamReader(TextReader.class.getClassLoader().getResourceAsStream(fileName)));
             String line;
-            while ((line = bufferedReader.readLine()) != null) {
+            while ((line = br.readLine()) != null) {
                 lines.add(line);
             }
         } catch (IOException e) {
