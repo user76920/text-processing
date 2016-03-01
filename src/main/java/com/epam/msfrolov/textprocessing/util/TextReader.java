@@ -30,10 +30,11 @@ public class TextReader {
                 lines.add(line);
             }
         } catch (IOException e) {
-            LOG.error("Unable to read a text file",e);
+            LOG.error("Unable to read a text file", e);
         }
         return lines.get(random.nextInt(lines.size()));
     }
+
     public static String getRandomLine() {
         return getRandomLine("text");
     }
