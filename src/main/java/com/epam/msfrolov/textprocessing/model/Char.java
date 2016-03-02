@@ -66,4 +66,22 @@ public class Char extends Component {
         LETTER, DIGIT, WHITESPACE, PUNCTUATION, DASH, OTHER
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Char aChar = (Char) o;
+
+        if (value != aChar.value) return false;
+        return type == aChar.type;
+
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type != null ? type.hashCode() : 0;
+        result = 31 * result + (int) value;
+        return result;
+    }
 }

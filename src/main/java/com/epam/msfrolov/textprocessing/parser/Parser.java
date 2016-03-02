@@ -49,29 +49,35 @@ public class Parser {
 
     private Composite parse(String string, CompositeType type) {
         Composite composite = Composite.create(type);
-        String[] strings = string.split(getRegex(type));
-        CompositeType typeForComponent = getSubType(type);
-        if (typeForComponent != WORD) {
+        if (type == WORD) {
+            //TODO
+        } else if (type == SENTENCE) {
+            String[] strings = string.split(getRegex(type));
+            CompositeType subType = getSubType(type);
             for (String componentString : strings) {
-                Composite parseComposite = parse(componentString, typeForComponent);
-                composite.add(parseComposite);
+                Composite compositeWord = Composite.create(WORD);
+                char[] symbols = componentString.toCharArray();
+                for (int i = 0; i < symbols.length; i++) {  //create new Char class and compare type or use .isSymbolForWord for char;
+                    if (Char.isSymbolForWord(symbols[i])) {
+                        compositeWord.add(Char.create(symbols[i]));
+                        if (!Char.isSymbolForWord(symbols[i + 1])) composite.add(compositeWord);
+                    } else composite.add(Char.create(symbols[i]));
+                }
             }
-        } else for (String componentString : strings) {
-            Composite compositeWord = Composite.create(WORD);
-            char[] symbols = componentString.toCharArray();
-            for (int i = 0; i < symbols.length; i++) {  //create new Char class and compare type or use .isSymbolForWord for char;
-                if (Char.isSymbolForWord(symbols[i])){
-                    compositeWord.add(Char.create(symbols[i]));
-                    if (!Char.isSymbolForWord(symbols[i + 1])) composite.add(compositeWord);
-                } else composite.add(Char.create(symbols[i]));
+        } else {
+            String[] strings = string.split(getRegex(type));
+            CompositeType subType = getSubType(type);
+            for (String componentString : strings) {
+                Composite component = parse(componentString, subType);
+                composite.add(component);
             }
         }
         return composite;
     }
 
+
     public Composite parse(String string) {
         Checker.isNull(string);
-        LOG.debug("");
         return parse(string, TEXT);
     }
 

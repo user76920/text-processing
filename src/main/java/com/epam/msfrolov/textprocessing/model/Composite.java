@@ -8,7 +8,7 @@ import java.util.List;
 
 import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.*;
 
-public class Composite extends Component implements Iterable<Component> {
+public class Composite extends Component implements Iterable<Component>{
 
     private CompositeType type;
     private List<Component> components;
@@ -66,7 +66,6 @@ public class Composite extends Component implements Iterable<Component> {
     public StringBuilder toPlainString(StringBuilder builder) {
         for (Component cp : components) {
             cp.toPlainString(builder);
-            System.out.println(builder);
         }
         return builder;
     }
@@ -76,4 +75,22 @@ public class Composite extends Component implements Iterable<Component> {
         TEXT, PARAGRAPH, SENTENCE, WORD
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Composite composite = (Composite) o;
+
+        if (type != composite.type) return false;
+        return components != null ? toPlainString().equals(composite.toPlainString()):composite.components == null;
+    }
+
+
+    @Override
+    public int hashCode() {
+        int result = type != null ? type.hashCode() : 0;
+        result = 31 * result + (components != null ? components.hashCode() : 0);
+        return result;
+    }
 }
