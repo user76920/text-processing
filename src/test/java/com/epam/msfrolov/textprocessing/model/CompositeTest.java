@@ -1,10 +1,19 @@
 package com.epam.msfrolov.textprocessing.model;
 
+import com.epam.msfrolov.textprocessing.factory.CompositeFactory;
+import com.sun.org.apache.xalan.internal.xsltc.dom.UnionIterator;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
+import java.util.Iterator;
+
+import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.WORD;
 import static org.junit.Assert.assertEquals;
 
 public class CompositeTest {
+
+    private static final Logger LOG = LoggerFactory.getLogger(CompositeTest.class.getName());
 
     @Test
     public void testToPlainString() throws Exception {
@@ -34,5 +43,26 @@ public class CompositeTest {
             composite.add(Char.create(aChar));
         }
         return mainComposite;
+    }
+
+    @Test
+    public void wordIteratorShouldAllowIteratedByTheWord() throws Exception {
+        //GIVEN
+        Composite testComposite = CompositeFactory.getCompositeText();
+        LOG.debug(testComposite.toPlainString());
+        String s = testComposite.toPlainString();
+        Iterator<Component> iterator = testComposite.iterator(WORD);
+        LOG.debug("Launch of iterator");
+    StringBuilder stringBuilder = new StringBuilder();
+
+        while (iterator.hasNext()) {
+            String ss = iterator.next().toPlainString();
+            LOG.info(ss);
+            stringBuilder.append(ss);
+        }
+
+        assertEquals(stringBuilder.toString(), s);
+        LOG.info("TEST  {}" ,stringBuilder.toString().equals(s));
+
     }
 }

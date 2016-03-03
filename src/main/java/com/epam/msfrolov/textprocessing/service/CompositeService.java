@@ -30,9 +30,7 @@ public class CompositeService {
 
 
     private static void extractListUniqueWords(Composite value, List<Composite> compositeList) {
-        LOG.debug("extractListUniqueWords level 1 {}");
         for (Component component : value) {
-            LOG.debug("extractListUniqueWords level 2{}");
             if (component instanceof Composite) {
                 LOG.debug("extractListUniqueWords level 3 Type component {}", ((Composite) component).getType());
                 Composite composite = (Composite) component;

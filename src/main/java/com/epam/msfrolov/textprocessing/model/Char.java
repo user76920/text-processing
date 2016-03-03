@@ -58,6 +58,12 @@ public class Char extends Component {
     }
 
     @Override
+    public String toPlainString() {
+        StringBuilder stringBuilder = toPlainString(new StringBuilder());
+        return stringBuilder.toString();
+    }
+
+    @Override
     public StringBuilder toPlainString(StringBuilder sb) {
         return sb.append(value);
     }

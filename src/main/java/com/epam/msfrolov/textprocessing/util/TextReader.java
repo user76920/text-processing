@@ -21,7 +21,6 @@ public class TextReader {
     public static String getRandomLine(String fileName) {
         List<String> lines = new ArrayList<>();
         try {
-            //BufferedReader br = new BufferedReader(new FileReader(fileName));
             BufferedReader br =  new BufferedReader(new InputStreamReader(TextReader.class.getClassLoader().getResourceAsStream(fileName)));
             String line;
             while ((line = br.readLine()) != null) {
@@ -29,6 +28,7 @@ public class TextReader {
             }
         } catch (IOException e) {
             LOG.error("Unable to read a text file", e);
+            throw new FileReadError();
         }
         return lines.get(random.nextInt(lines.size()));
     }
