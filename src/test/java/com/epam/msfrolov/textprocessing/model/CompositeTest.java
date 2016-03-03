@@ -30,6 +30,7 @@ public class CompositeTest {
         //THEN
         assertEquals(testString, testCompositeString);
     }
+    
 
     private Composite createCompositeForTest(char[] chars) {
         Composite mainComposite = Composite.create();
