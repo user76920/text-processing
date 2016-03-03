@@ -8,6 +8,7 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Iterator;
 
+import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.SENTENCE;
 import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.WORD;
 import static org.junit.Assert.assertEquals;
 
@@ -46,23 +47,43 @@ public class CompositeTest {
     }
 
     @Test
-    public void wordIteratorShouldAllowIteratedByTheWord() throws Exception {
+    public void wordIteratorShouldAllowIteratedBySentencePart() throws Exception {
         //GIVEN
         Composite testComposite = CompositeFactory.getCompositeText();
         LOG.debug(testComposite.toPlainString());
         String s = testComposite.toPlainString();
         Iterator<Component> iterator = testComposite.iterator(WORD);
         LOG.debug("Launch of iterator");
-    StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
+        //WHEN
+        while (iterator.hasNext()) {
+            String ss = iterator.next().toPlainString();
+            LOG.info(ss);
+            stringBuilder.append(ss);
+        }
+        //THEN
+        assertEquals(stringBuilder.toString(), s);
+        LOG.info("TEST  {}", stringBuilder.toString().equals(s));
+    }
 
+    @Test
+    public void sentenceIteratorShouldAllowIteratedBySentence() throws Exception {
+        //GIVEN
+        Composite testComposite = CompositeFactory.getCompositeText();
+        LOG.debug(testComposite.toPlainString());
+        String s = testComposite.toPlainString();
+        Iterator<Component> iterator = testComposite.iterator(SENTENCE);
+        LOG.debug("Launch of iterator");
+        StringBuilder stringBuilder = new StringBuilder();
+
+        //WHEN
         while (iterator.hasNext()) {
             String ss = iterator.next().toPlainString();
             LOG.info(ss);
             stringBuilder.append(ss);
         }
 
+        //THEN
         assertEquals(stringBuilder.toString(), s);
-        LOG.info("TEST  {}" ,stringBuilder.toString().equals(s));
-
     }
 }

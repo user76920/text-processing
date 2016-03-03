@@ -103,19 +103,19 @@ public class Composite extends Component implements Iterable<Component> {
     public Iterator<Component> iterator(CompositeType type) {
         if (type == WORD)
             return new WordIterator();
+        if (type == SENTENCE)
+            return new SentenceIterator();
         return null;
     }
 
     private class WordIterator implements Iterator<Component> {
 
         private Deque<Iterator<Component>> stack;
-        private Component nextComponent;
 
         public WordIterator() {
             stack = new ArrayDeque<>();
             Composite composite = Composite.this;
             checkCompositeType(composite.getType());
-            // stack.addLast(composite.iterator());
             findFirstIterator(composite, stack);
         }
 
@@ -139,23 +139,9 @@ public class Composite extends Component implements Iterable<Component> {
 
         @Override
         public boolean hasNext() {
-            Boolean checkNext;
-            Boolean checkClass = false;
-            Component component = null;
-            if(innerHasNext(false))
-            do {
-                component = this.next();
-                //component = stack.peekLast().next();
-                checkNext = innerHasNext(false);
-                checkClass = component instanceof Composite;
-            }while (!checkClass || checkNext);
-
-            if (checkClass){
-                nextComponent = component;
-                return true;
-            }
-            return false;
+            return innerHasNext(false);
         }
+
         private Boolean innerHasNext(Boolean b) {
             if (stack.size() == 1) {
                 if (stack.peekLast().hasNext()) {
@@ -187,10 +173,72 @@ public class Composite extends Component implements Iterable<Component> {
 
         @Override
         public Component next() {
-            return nextComponent;
+            return stack.peekLast().next();
         }
 
     }
+
+    private class SentenceIterator implements Iterator<Component> {
+
+        private Deque<Iterator<Component>> stack;
+
+        public SentenceIterator() {
+            stack = new ArrayDeque<>();
+            Composite composite = Composite.this;
+            checkCompositeType(composite.getType());
+            findFirstIterator(composite, stack);
+        }
+
+        private void findFirstIterator(Composite composite, Deque<Iterator<Component>> iteratorDeque) {
+            if (composite.getType() == PARAGRAPH) {
+                iteratorDeque.addLast(composite.iterator());
+            } else {
+                Iterator<Component> iterator = composite.iterator();
+                iterator.next();
+                iteratorDeque.addLast(iterator);
+                findFirstIterator((Composite) composite.getFirstElement(), iteratorDeque);
+            }
+        }
+
+        private void checkCompositeType(CompositeType currentType) {
+            if (currentType != PARAGRAPH && currentType != TEXT) {
+                LOG.error("Wrong type for this operation (only {},{},{})", TEXT, PARAGRAPH);
+                throw new IllegalArgumentException();
+            }
+        }
+
+        @Override
+        public boolean hasNext() {
+            return innerHasNext(false);
+        }
+
+        private Boolean innerHasNext(Boolean b) {
+            if (stack.size() == 1) {
+                if (stack.peekLast().hasNext()) {
+                    Composite composite = (Composite) stack.peekLast().next();
+                    stack.addLast(composite.iterator());
+                    b = innerHasNext(b);
+                } else b = false;
+            } else if (stack.size() == 2) {
+                if (stack.peekLast().hasNext()) {
+                    b = true;
+                } else {
+                    stack.pollLast();
+                    b = innerHasNext(b);
+                }
+            } else {
+                b = false;
+            }
+            return b;
+        }
+
+        @Override
+        public Component next() {
+            return stack.peekLast().next();
+        }
+
+    }
+
 
     private Component getFirstElement() {
         return components.get(INDEX_FIRST_ELEMENT);
