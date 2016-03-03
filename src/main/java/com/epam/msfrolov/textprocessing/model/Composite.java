@@ -109,6 +109,7 @@ public class Composite extends Component implements Iterable<Component> {
     private class WordIterator implements Iterator<Component> {
 
         private Deque<Iterator<Component>> stack;
+        private Component nextComponent;
 
         public WordIterator() {
             stack = new ArrayDeque<>();
@@ -119,7 +120,6 @@ public class Composite extends Component implements Iterable<Component> {
         }
 
         private void findFirstIterator(Composite composite, Deque<Iterator<Component>> iteratorDeque) {
-            LOG.debug("ADD FIRST ITERATOR - TYPE: {}", composite.getType());
             if (composite.getType() == SENTENCE) {
                 iteratorDeque.addLast(composite.iterator());
             } else {
@@ -139,61 +139,55 @@ public class Composite extends Component implements Iterable<Component> {
 
         @Override
         public boolean hasNext() {
-            Boolean b = false;
-            Boolean c = innerHasNext(b);
-            LOG.debug("Finally 2 {}", c);
-            return c;
+            Boolean checkNext;
+            Boolean checkClass = false;
+            Component component = null;
+            if(innerHasNext(false))
+            do {
+                component = this.next();
+                //component = stack.peekLast().next();
+                checkNext = innerHasNext(false);
+                checkClass = component instanceof Composite;
+            }while (!checkClass || checkNext);
 
+            if (checkClass){
+                nextComponent = component;
+                return true;
+            }
+            return false;
         }
-
         private Boolean innerHasNext(Boolean b) {
-
-            LOG.debug("stack.size() - {}", stack.size());
             if (stack.size() == 1) {
                 if (stack.peekLast().hasNext()) {
                     Composite composite = (Composite) stack.peekLast().next();
                     stack.addLast(composite.iterator());
                     b = innerHasNext(b);
-
-                   /* Composite composite = (Composite) stack.peekLast().next();
-                    Composite subComposite = (Composite) composite.getFirstElement();
-                    stack.addLast(subComposite.iterator());
-                    b = innerHasNext(b);*/
                 } else b = false;
             } else if (stack.size() == 2) {
-                LOG.debug("IN 2");
                 if (stack.peekLast().hasNext()) {
                     Composite composite = (Composite) stack.peekLast().next();
-                    LOG.debug("TYPE: - {}", composite.getType());
-                    LOG.debug("composite t p s: - {}", composite.toPlainString());
                     stack.addLast(composite.iterator());
-                    LOG.debug("!!!stack.size() - {}", stack.size());
-                    LOG.debug("b : - {}", b);
                     b = innerHasNext(b);
                 } else {
                     stack.pollLast();
                     b = innerHasNext(b);
                 }
             } else if (stack.size() == 3) {
-                LOG.debug("IN 3");
                 if (stack.peekLast().hasNext()) {
                     b = true;
-                    LOG.debug("Stack size {}, must be true {}", stack.size(), b);
                 } else {
                     stack.pollLast();
                     b = innerHasNext(b);
                 }
             } else {
-                LOG.debug("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
                 b = false;
             }
-            LOG.debug("Final {}", b);
             return b;
         }
 
         @Override
         public Component next() {
-            return stack.peekLast().next();
+            return nextComponent;
         }
 
     }
