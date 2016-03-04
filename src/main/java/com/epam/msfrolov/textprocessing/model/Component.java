@@ -5,8 +5,8 @@ import com.epam.msfrolov.textprocessing.util.PropertiesService;
 import java.util.Map;
 
 public abstract class Component implements Comparable<Component> {
-    private static final Map<Type, Type> typeProperties = PropertiesService.get("regExType.properties");
-    private static final Map<String, String> regexProperties = PropertiesService.get("type.properties");
+    public static final Map<Type, Type> typeProperties = PropertiesService.get("regExType.properties");
+    public static final Map<String, String> regexProperties = PropertiesService.get("type.properties");
 
     private Type type;
 
@@ -29,5 +29,10 @@ public abstract class Component implements Comparable<Component> {
 
     public enum Type {
         TEXT, PARAGRAPH, SENTENCE, WORD, LETTER, WHITESPACE, PUNCTUATION, OTHER;
+
+        @Override
+        public String toString() {
+            return name().toLowerCase();
+        }
     }
 }

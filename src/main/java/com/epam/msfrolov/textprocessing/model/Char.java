@@ -15,23 +15,21 @@ public class Char extends Component {
     public static Char create(char value) {
         Char character = new Char(value);
         character.setType(checkType(value));
-        Checker.isNull(character.type);
+        Checker.isNull(character.getType());
         return character;
     }
 
     private static Type checkType(char symbol) {
-        if (String.valueOf(symbol).matches("([.!?,:\"';()\\[\\]\\{\\}])"))
+        if (String.valueOf(symbol).matches(Component.regexProperties.get(PUNCTUATION)))
             return PUNCTUATION;
         if (Character.isWhitespace(symbol))
             return WHITESPACE;
-        if (Character.isLetter(symbol) || Character.isDigit(symbol) || String.valueOf(symbol).matches("([-_])"))
+        if (Character.isLetter(symbol)
+                || Character.isDigit(symbol)
+                || String.valueOf(symbol).matches(Component.regexProperties.get(LETTER)))
             return LETTER;
         else
             return OTHER;
-    }
-
-    public static boolean isSymbolForWord(char value) {
-        return (Character.isLetter(value) || Character.isDigit(value) || String.valueOf(value).matches("([-_])"));
     }
 
     @Override
@@ -52,15 +50,12 @@ public class Char extends Component {
 
         Char aChar = (Char) o;
 
-        if (value != aChar.value) return false;
-        return type == aChar.type;
+        return value == aChar.value;
 
     }
 
     @Override
     public int hashCode() {
-        int result = (int) value;
-        result = 31 * result + (type != null ? type.hashCode() : 0);
-        return result;
+        return (int) value;
     }
 }
