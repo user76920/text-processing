@@ -124,7 +124,7 @@ public class CompositeTest {
             }
 
         }
-        List<Composite> composites = randomSentence.extractListUniqueComposite(WORD);
+        List<Composite> composites = randomSentence.extractListComposite(WORD, true);
         for (Composite composite : composites) {
             LOG.debug("type {} value {}", composite.getType().name(), composite.toPlainString());
         }
