@@ -4,24 +4,12 @@ import com.epam.msfrolov.textprocessing.util.Checker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import static com.epam.msfrolov.textprocessing.model.Char.CharType.*;
+import static com.epam.msfrolov.textprocessing.model.Component.Type.*;
+
 
 public class Char extends Component {
-    private static Logger LOG = LoggerFactory.getLogger(Char.class.getName());
-
-    private CharType type;
     private final char value;
-
-    @Override
-    public CharType getType() {
-        Checker.isNull(type);
-        return type;
-    }
-
-    private void setType(CharType type) {
-        Checker.isNull(type);
-        this.type = type;
-    }
+    private Type type;
 
     private Char(char value) {
         this.value = value;
@@ -34,28 +22,35 @@ public class Char extends Component {
         return character;
     }
 
-    private static CharType checkType(char symbol) {
+    private static Type checkType(char symbol) {
         if (String.valueOf(symbol).matches("([.!?,:\"';()\\[\\]\\{\\}])"))
             return PUNCTUATION;
         if (Character.isWhitespace(symbol))
             return WHITESPACE;
-        if (Character.isLetter(symbol))
+        if (Character.isLetter(symbol) || Character.isDigit(symbol) || String.valueOf(symbol).matches("([-_])"))
             return LETTER;
-        if (Character.isDigit(symbol))
-            return DIGIT;
-        if (String.valueOf(symbol).matches("([-_])"))
-            return DASH;
         else
             return OTHER;
     }
 
-    public boolean isSymbolForWord(){
-        return type == Char.CharType.LETTER
-                || type == Char.CharType.DIGIT
-                || type == Char.CharType.DASH;
+    public static boolean isSymbolForWord(char value) {
+        return (Character.isLetter(value) || Character.isDigit(value) || String.valueOf(value).matches("([-_])"));
     }
-    public static boolean isSymbolForWord(char value){
-        return  (Character.isLetter(value)||Character.isDigit(value)||String.valueOf(value).matches("([-_])"));
+
+    @Override
+    public Type getType() {
+        Checker.isNull(type);
+        return type;
+    }
+
+    private void setType(Type type) {
+        Checker.isNull(type);
+        this.type = type;
+    }
+
+    @Override
+    protected StringBuilder toPlainString(StringBuilder sb) {
+        return sb.append(value);
     }
 
     @Override
@@ -65,29 +60,21 @@ public class Char extends Component {
     }
 
     @Override
-    protected StringBuilder toPlainString(StringBuilder sb) {
-        return sb.append(value);
-    }
-
-    public enum CharType {
-        LETTER, DIGIT, WHITESPACE, PUNCTUATION, DASH, OTHER
-    }
-
-    @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
         Char aChar = (Char) o;
 
-        return value == aChar.value && type == aChar.type;
+        if (value != aChar.value) return false;
+        return type == aChar.type;
 
     }
 
     @Override
     public int hashCode() {
-        int result = type != null ? type.hashCode() : 0;
-        result = 31 * result + (int) value;
+        int result = (int) value;
+        result = 31 * result + (type != null ? type.hashCode() : 0);
         return result;
     }
 }

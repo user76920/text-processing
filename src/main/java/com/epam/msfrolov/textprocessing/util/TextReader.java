@@ -27,8 +27,7 @@ public class TextReader {
                 lines.add(line);
             }
         } catch (IOException e) {
-            LOG.error("Unable to read a text file", e);
-            throw new FileReadError();
+            throw new FileReadException(e);
         }
         return lines.get(random.nextInt(lines.size()));
     }
