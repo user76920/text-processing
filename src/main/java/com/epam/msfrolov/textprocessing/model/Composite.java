@@ -4,7 +4,6 @@ import com.epam.msfrolov.textprocessing.util.Checker;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.Array;
 import java.util.*;
 
 import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.*;
@@ -17,6 +16,16 @@ public class Composite extends Component implements Iterable<Component> {
 
     private CompositeType type;
     private List<Component> components;
+    private static Map<CompositeType, Integer> typeMap;
+
+    static {
+        typeMap = new HashMap<>();
+        typeMap.put(TEXT, 0);
+        typeMap.put(PARAGRAPH, 1);
+        typeMap.put(SENTENCE, 2);
+        typeMap.put(WORD, 3);
+    }
+
 
     private Composite(CompositeType type) {
         this.components = new ArrayList<>();
@@ -32,14 +41,11 @@ public class Composite extends Component implements Iterable<Component> {
         return create(TEXT);
     }
 
-    public Iterator<Component> iterator() {
-        return components.iterator();
-    }
-
     public boolean isEmpty() {
         return components.isEmpty();
     }
 
+    @Override
     public CompositeType getType() {
         Checker.isNull(type);
         return type;
@@ -69,16 +75,17 @@ public class Composite extends Component implements Iterable<Component> {
     }
 
     @Override
-    public StringBuilder toPlainString(StringBuilder builder) {
+    protected StringBuilder toPlainString(StringBuilder builder) {
         for (Component cp : components) {
             cp.toPlainString(builder);
         }
         return builder;
     }
 
-
     public enum CompositeType {
         TEXT, PARAGRAPH, SENTENCE, WORD
+
+
     }
 
     @Override
@@ -93,12 +100,11 @@ public class Composite extends Component implements Iterable<Component> {
 
     }
 
-    @Override
-    public int hashCode() {
-        int result = type != null ? type.hashCode() : 0;
-        result = 31 * result + (components != null ? components.hashCode() : 0);
-        return result;
+    private Component getFirstElement() {
+        return components.get(INDEX_FIRST_ELEMENT);
     }
+
+    //Iterators
 
     public Iterator<Component> iterator(CompositeType type) {
         if (type == WORD)
@@ -106,6 +112,21 @@ public class Composite extends Component implements Iterable<Component> {
         if (type == SENTENCE)
             return new SentenceIterator();
         return null;
+    }
+
+    private Component getLastElement() {
+        return components.get(components.size() - 1);
+    }
+
+    @Override
+    public int hashCode() {
+        int result = type != null ? type.hashCode() : 0;
+        result = 31 * result + (components != null ? components.hashCode() : 0);
+        return result;
+    }
+
+    public Iterator<Component> iterator() {
+        return components.iterator();
     }
 
     private class WordIterator implements Iterator<Component> {
@@ -237,14 +258,44 @@ public class Composite extends Component implements Iterable<Component> {
             return stack.peekLast().next();
         }
 
+
     }
 
+    //Function
 
-    private Component getFirstElement() {
-        return components.get(INDEX_FIRST_ELEMENT);
+    public int getNumberOfChar() {
+        return getNumberOfChar(this, 0);
     }
 
-    private Component getLastElement() {
-        return components.get(components.size() - 1);
+    private int getNumberOfChar(Composite composite, int i) {
+        for (Component subComponent : composite) {
+            if (subComponent instanceof Char) {
+                i++;
+            } else {
+                i = getNumberOfChar((Composite) subComponent, i);
+            }
+        }
+        return i;
     }
+
+    public List<Composite> extractListUniqueComposite(CompositeType type) {
+        List<Composite> compositeList = new ArrayList<>();
+        extractListUniqueComposite(this, compositeList, type);
+        return compositeList;
+    }
+
+    private void extractListUniqueComposite(Composite value, List<Composite> compositeList, CompositeType type) {
+        for (Component component : value) {
+            if (component instanceof Composite) {
+                Composite composite = (Composite) component;
+                if (composite.getType() == type) {
+                    if (!compositeList.contains(composite)) {
+                        compositeList.add(composite);
+                    }
+                } else if (typeMap.get(composite.getType()) < typeMap.get(type))
+                    extractListUniqueComposite(composite, compositeList, type);
+            }
+        }
+    }
+
 }

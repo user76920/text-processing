@@ -1,16 +1,20 @@
 package com.epam.msfrolov.textprocessing.model;
 
 import com.epam.msfrolov.textprocessing.factory.CompositeFactory;
-import com.sun.org.apache.xalan.internal.xsltc.dom.UnionIterator;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.HashSet;
 import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
+
 
 import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.SENTENCE;
 import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.WORD;
 import static org.junit.Assert.assertEquals;
+
 
 public class CompositeTest {
 
@@ -30,7 +34,7 @@ public class CompositeTest {
         //THEN
         assertEquals(testString, testCompositeString);
     }
-    
+
 
     private Composite createCompositeForTest(char[] chars) {
         Composite mainComposite = Composite.create();
@@ -86,5 +90,48 @@ public class CompositeTest {
 
         //THEN
         assertEquals(stringBuilder.toString(), s);
+    }
+
+    @Test
+    public void shouldGiveNumberOfChar() throws Exception {
+        //GIVEN
+        Composite compositeText = CompositeFactory.getCompositeText();
+
+        //WHEN
+        int numberOfCharInThisString = compositeText.toPlainString().length();
+        int numberOfCharInThatString = compositeText.getNumberOfChar();
+        LOG.debug("Number of Char into composition = {} & {} ", numberOfCharInThisString, numberOfCharInThatString);
+        int numberOfChar = compositeText.toPlainString().length();
+
+        //THEN
+        assertEquals(numberOfCharInThisString, numberOfCharInThatString);
+    }
+
+
+    @Test
+    public void testExtractListUniqueWordsAndWordIterator() throws Exception {
+        //GIVEN
+        Composite randomSentence = CompositeFactory.getCompositeText();
+
+        //WHEN
+        Iterator<Component> iterator = randomSentence.iterator(WORD);
+        Set<Component> componentSet = new HashSet<>();
+        while (iterator.hasNext()) {
+            Component component = iterator.next();
+            LOG.debug("Type = {}, Component = {}",component.getType(), component);
+            LOG.debug("component.getType() == WORD = {}",component.getType() == WORD);
+            if (component.getType() == WORD) {
+                componentSet.add(component);
+            }
+
+        }
+        List<Composite> composites = randomSentence.extractListUniqueComposite(WORD);
+        for (Composite composite : composites) {
+            LOG.debug("type {} value {}", composite.getType().name(), composite.toPlainString());
+        }
+
+        //THEN
+        LOG.debug("componentSet.size() {} composites.size() {}", componentSet.size(), composites.size());
+        assertEquals(componentSet.size(), composites.size());
     }
 }

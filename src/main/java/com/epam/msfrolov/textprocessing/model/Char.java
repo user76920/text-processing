@@ -12,6 +12,7 @@ public class Char extends Component {
     private CharType type;
     private final char value;
 
+    @Override
     public CharType getType() {
         Checker.isNull(type);
         return type;
@@ -64,7 +65,7 @@ public class Char extends Component {
     }
 
     @Override
-    public StringBuilder toPlainString(StringBuilder sb) {
+    protected StringBuilder toPlainString(StringBuilder sb) {
         return sb.append(value);
     }
 
@@ -79,8 +80,7 @@ public class Char extends Component {
 
         Char aChar = (Char) o;
 
-        if (value != aChar.value) return false;
-        return type == aChar.type;
+        return value == aChar.value && type == aChar.type;
 
     }
 
