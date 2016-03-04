@@ -4,7 +4,6 @@ import com.epam.msfrolov.textprocessing.model.Composite;
 import com.epam.msfrolov.textprocessing.util.TextReader;
 import org.junit.Test;
 
-import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.*;
 import static org.junit.Assert.*;
 
 public class ParserTest {

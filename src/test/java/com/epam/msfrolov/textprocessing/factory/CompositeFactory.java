@@ -11,9 +11,10 @@ public class CompositeFactory {
         return parser.parse(testString);
     }
 
+
     public static Composite getRandomSentence() {
         Parser parser = Parser.create();
-        String s = TextReader.getRandomLine();
+        String s = TextReader.getRandomLine("text");
         return parser.parse(s);
     }
 }

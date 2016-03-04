@@ -1,16 +1,15 @@
 package com.epam.msfrolov.textprocessing.util;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.Scanner;
 
 public class TextReader {
-    private static Logger LOG = LoggerFactory.getLogger(TextReader.class.getName());
     public static Random random = new Random();
 
     public static String read(String path) {
@@ -21,7 +20,7 @@ public class TextReader {
     public static String getRandomLine(String fileName) {
         List<String> lines = new ArrayList<>();
         try {
-            BufferedReader br =  new BufferedReader(new InputStreamReader(TextReader.class.getClassLoader().getResourceAsStream(fileName)));
+            BufferedReader br = new BufferedReader(new InputStreamReader(TextReader.class.getClassLoader().getResourceAsStream(fileName)));
             String line;
             while ((line = br.readLine()) != null) {
                 lines.add(line);
@@ -31,9 +30,4 @@ public class TextReader {
         }
         return lines.get(random.nextInt(lines.size()));
     }
-
-    public static String getRandomLine() {
-        return getRandomLine("text");
-    }
-
 }

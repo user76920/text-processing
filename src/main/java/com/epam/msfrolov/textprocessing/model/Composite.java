@@ -1,38 +1,22 @@
 package com.epam.msfrolov.textprocessing.model;
 
-import com.epam.msfrolov.textprocessing.util.Checker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import java.util.*;
+
+import static com.epam.msfrolov.textprocessing.model.Component.Type.TEXT;
 
 public class Composite extends Component implements Iterable<Component> {
 
     public static final Comparator<Component> COMPARE_SUBCOMPONENT
             = (o1, o2) -> o1.toPlainString().compareTo(o2.toString());
     private static final int INDEX_FIRST_ELEMENT = 0;
-    private static final Logger LOG = LoggerFactory.getLogger(Composite.class.getName());
-    private static Map<CompositeType, Integer> typeMap;
-
-    static {
-        typeMap = new HashMap<>();
-        typeMap.put(TEXT, 0);
-        typeMap.put(PARAGRAPH, 1);
-        typeMap.put(SENTENCE, 2);
-        typeMap.put(WORD, 3);
-    }
-
-    private CompositeType type;
     private List<Component> components;
 
-
-    private Composite(CompositeType type) {
+    private Composite(Type type) {
         this.components = new ArrayList<>();
         this.setType(type);
     }
 
-
-    public static Composite create(CompositeType type) {
+    public static Composite create(Type type) {
         return new Composite(type);
     }
 
@@ -42,17 +26,6 @@ public class Composite extends Component implements Iterable<Component> {
 
     public boolean isEmpty() {
         return components.isEmpty();
-    }
-
-    @Override
-    public CompositeType getType() {
-        Checker.isNull(type);
-        return type;
-    }
-
-    private void setType(CompositeType type) {
-        Checker.isNull(type);
-        this.type = type;
     }
 
     public void add(Component component) {

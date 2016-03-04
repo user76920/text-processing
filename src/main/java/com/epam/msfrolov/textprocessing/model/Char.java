@@ -1,15 +1,12 @@
 package com.epam.msfrolov.textprocessing.model;
 
 import com.epam.msfrolov.textprocessing.util.Checker;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import static com.epam.msfrolov.textprocessing.model.Component.Type.*;
 
 
 public class Char extends Component {
     private final char value;
-    private Type type;
 
     private Char(char value) {
         this.value = value;
@@ -35,17 +32,6 @@ public class Char extends Component {
 
     public static boolean isSymbolForWord(char value) {
         return (Character.isLetter(value) || Character.isDigit(value) || String.valueOf(value).matches("([-_])"));
-    }
-
-    @Override
-    public Type getType() {
-        Checker.isNull(type);
-        return type;
-    }
-
-    private void setType(Type type) {
-        Checker.isNull(type);
-        this.type = type;
     }
 
     @Override

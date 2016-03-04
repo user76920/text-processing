@@ -12,14 +12,11 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
 
-import static com.epam.msfrolov.textprocessing.model.Composite.CompositeType.*;
-
 public class Parser {
 
     private static final Logger LOG = LoggerFactory.getLogger(Parser.class.getName());
 
-    private Map<CompositeType, CompositeType> typeMap;
-    private Map<CompositeType, String> regexMap;
+
 
     private Parser() {
         this.typeMap = initializationTypeMap();
@@ -37,14 +34,6 @@ public class Parser {
 
     public static Parser create(Map<CompositeType, String> regexMap) {
         return new Parser(regexMap);
-    }
-
-    private Map<CompositeType, CompositeType> initializationTypeMap() {
-        Map<CompositeType, CompositeType> typeMap = new HashMap<>();
-        typeMap.put(TEXT, PARAGRAPH);
-        typeMap.put(PARAGRAPH, SENTENCE);
-        typeMap.put(SENTENCE, WORD);
-        return typeMap;
     }
 
     private Composite parse(String string, CompositeType type) {
@@ -90,32 +79,4 @@ public class Parser {
         return regexMap.get(type);
     }
 
-    static class RegexArgument {
-
-        private static Logger LOG = LoggerFactory.getLogger(RegexArgument.class.getName());
-
-        public static Map<CompositeType, String> getRegexFromProperty() {
-            Map<CompositeType, String> regexMap = new HashMap<>();
-            String text = getRegexTypeFromProperty("text");
-            String paragraph = getRegexTypeFromProperty("paragraph");
-            String sentences = getRegexTypeFromProperty("sentences");
-            String word = getRegexTypeFromProperty("word");
-            regexMap.put(TEXT, text);
-            regexMap.put(PARAGRAPH, paragraph);
-            regexMap.put(SENTENCE, sentences);
-            regexMap.put(WORD, word);
-            return regexMap;
-        }
-
-        private static String getRegexTypeFromProperty(String propertyKey) {
-            Properties regexProperties = new Properties();
-            try {
-                regexProperties.load(RegexArgument.class.getClassLoader().getResourceAsStream("regExType.properties"));
-            } catch (IOException e) {
-                LOG.error("Property with RegEx arguments was not read!", e);
-            }
-            return regexProperties.getProperty(propertyKey);
-        }
-
-    }
 }
