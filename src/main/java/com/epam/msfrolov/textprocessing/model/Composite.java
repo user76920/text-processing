@@ -278,6 +278,22 @@ public class Composite extends Component implements Iterable<Component> {
         return i;
     }
 
+    public int getNumberOfComposite(CompositeType type) {
+        return getNumberOfComposite(this, 0, type);
+    }
+
+    private int getNumberOfComposite(Composite composite, int i, CompositeType type) {
+
+        for (Component subComponent : composite) {
+            if (subComponent.getType() == type) {
+                i++;
+            } else if (!(subComponent instanceof Char))
+                if (typeMap.get(((Composite) subComponent).getType()) < typeMap.get(type))
+                    i = getNumberOfComposite((Composite) subComponent, i, type);
+        }
+        return i;
+    }
+
     public List<Composite> extractListUniqueComposite(CompositeType type) {
         List<Composite> compositeList = new ArrayList<>();
         extractListUniqueComposite(this, compositeList, type);

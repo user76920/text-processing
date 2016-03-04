@@ -75,7 +75,6 @@ public class Parser {
         return composite;
     }
 
-
     public Composite parse(String string) {
         Checker.isNull(string);
         return parse(string, TEXT);

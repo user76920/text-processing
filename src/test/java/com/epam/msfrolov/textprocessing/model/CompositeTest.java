@@ -107,7 +107,6 @@ public class CompositeTest {
         assertEquals(numberOfCharInThisString, numberOfCharInThatString);
     }
 
-
     @Test
     public void testExtractListUniqueWordsAndWordIterator() throws Exception {
         //GIVEN
@@ -118,8 +117,8 @@ public class CompositeTest {
         Set<Component> componentSet = new HashSet<>();
         while (iterator.hasNext()) {
             Component component = iterator.next();
-            LOG.debug("Type = {}, Component = {}",component.getType(), component);
-            LOG.debug("component.getType() == WORD = {}",component.getType() == WORD);
+            LOG.debug("Type = {}, Component = {}", component.getType(), component);
+            LOG.debug("component.getType() == WORD = {}", component.getType() == WORD);
             if (component.getType() == WORD) {
                 componentSet.add(component);
             }
@@ -133,5 +132,42 @@ public class CompositeTest {
         //THEN
         LOG.debug("componentSet.size() {} composites.size() {}", componentSet.size(), composites.size());
         assertEquals(componentSet.size(), composites.size());
+    }
+
+    @Test
+    public void testMethodGetNumberOfComposite() throws Exception {
+        //GIVEN
+        Composite randomSentence = CompositeFactory.getCompositeText();
+
+        //WHEN
+        //WORD
+        Iterator<Component> iteratorWord = randomSentence.iterator(WORD);
+        int counterWord = 0;
+        while (iteratorWord.hasNext()) {
+            Component component = iteratorWord.next();
+            LOG.debug("Type = {}, Component = {}", component.getType(), component);
+            LOG.debug("component.getType() == WORD = {}", component.getType() == WORD);
+            if (component.getType() == WORD) {
+                counterWord++;
+            }
+        }
+        int numberWord = randomSentence.getNumberOfComposite(WORD);
+        //SENTENCE
+        Iterator<Component> iteratorSentence = randomSentence.iterator(SENTENCE);
+        int counterSentence = 0;
+        while (iteratorSentence.hasNext()) {
+            Component component = iteratorSentence.next();
+            LOG.debug("Type = {}, Component = {}", component.getType(), component);
+            LOG.debug("component.getType() == WORD = {}", component.getType() == WORD);
+            counterSentence++;
+
+        }
+        int numberSentence = randomSentence.getNumberOfComposite(SENTENCE);
+
+        //THEN
+        LOG.debug("counterWord {} numberWord {}", counterWord, numberWord);
+        assertEquals(counterWord, numberWord);
+        LOG.debug("counterSentence {} numberSentence {}", counterSentence, numberSentence);
+        assertEquals(counterSentence, numberSentence);
     }
 }
