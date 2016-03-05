@@ -1,11 +1,13 @@
 package com.epam.msfrolov.textprocessing.model;
 
 import com.epam.msfrolov.textprocessing.util.Checker;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.epam.msfrolov.textprocessing.model.Component.Type.*;
 
-
 public class Char extends Component {
+   private static final Logger log = LoggerFactory.getLogger(Char.class);
     private final char value;
 
     private Char(char value) {
@@ -20,16 +22,19 @@ public class Char extends Component {
     }
 
     private static Type checkType(char symbol) {
-        if (String.valueOf(symbol).matches(Component.regexProperties.get(PUNCTUATION)))
+        log.debug("symbol {} Component.REGEX_PROPERTIES.get(PUNCTUATION)) {}", symbol, Component.REGEX_PROPERTIES.get(PUNCTUATION.toString()));
+        if (String.valueOf(symbol).matches(Component.REGEX_PROPERTIES.get(PUNCTUATION.toString())))
             return PUNCTUATION;
         if (Character.isWhitespace(symbol))
             return WHITESPACE;
-        if (Character.isLetter(symbol)
-                || Character.isDigit(symbol)
-                || String.valueOf(symbol).matches(Component.regexProperties.get(LETTER)))
+        if (Character.isLetter(symbol) || Character.isDigit(symbol) || String.valueOf(symbol).matches(Component.REGEX_PROPERTIES.get(LETTER.toString())))
             return LETTER;
         else
             return OTHER;
+    }
+
+    public static boolean isSymbolForWord(char symbol) {
+        return (Character.isLetter(symbol) || Character.isDigit(symbol) || String.valueOf(symbol).matches(Component.REGEX_PROPERTIES.get(LETTER.toString())));
     }
 
     @Override

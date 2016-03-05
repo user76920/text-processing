@@ -1,6 +1,5 @@
 package com.epam.msfrolov.textprocessing.model;
 
-import com.epam.msfrolov.textprocessing.model.Char.CharType;
 import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -8,8 +7,8 @@ import org.slf4j.LoggerFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.epam.msfrolov.textprocessing.model.Char.CharType.*;
-import static org.junit.Assert.*;
+import static com.epam.msfrolov.textprocessing.model.Component.Type.*;
+import static junit.framework.TestCase.assertEquals;
 
 public class CharTest {
 
@@ -22,18 +21,19 @@ public class CharTest {
         char[] symbol = {'J', 'u', 'Й', 'ё',};
         char[] digit = {'0', '5', '9'};
         char[] whitespace = {' ', '\n'};
-        char[] other = {'~', '&','%','$','#'};
-        char[] punctuation = {'.','!','?',',',':','"','\'',';','(',')','[',']','{','}',};
+        char[] other = {'~', '&', '%', '$', '#'};
+        char[] punctuation = {'.', '!', '?', ',', ':', '"', '\'', ';', '(', ')', '[', ']', '{', '}',};
 
-        //ACT
+
         assertSymbol(symbol, LETTER);
-        assertSymbol(digit, DIGIT);
+        assertSymbol(digit, LETTER);
         assertSymbol(whitespace, WHITESPACE);
         assertSymbol(other, OTHER);
         assertSymbol(punctuation, PUNCTUATION);
     }
 
-    private void assertSymbol(char[] array, CharType type) {
+    private void assertSymbol(char[] array, Component.Type type) {
+        //ACT
         List<Char> list = new ArrayList<>(array.length);
         for (char sb : array) list.add(Char.create(sb));
 

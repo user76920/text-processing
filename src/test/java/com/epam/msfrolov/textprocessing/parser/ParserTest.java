@@ -1,28 +1,36 @@
 package com.epam.msfrolov.textprocessing.parser;
 
+import com.epam.msfrolov.textprocessing.factory.CompositeFactory;
 import com.epam.msfrolov.textprocessing.model.Composite;
-import com.epam.msfrolov.textprocessing.util.TextReader;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import static org.junit.Assert.*;
+import static com.epam.msfrolov.textprocessing.model.Component.Type.*;
+import static org.junit.Assert.assertEquals;
 
 public class ParserTest {
+    private static final Logger log = LoggerFactory.getLogger(ParserTest.class);
 
     @Test
-    public void shouldGiveSubClass() throws Exception {
+    public void shouldGiveSubComposite() throws Exception {
         Parser parser = Parser.create();
-        assertEquals(PARAGRAPH, parser.getSubType(TEXT));
-        assertEquals(SENTENCE, parser.getSubType(PARAGRAPH));
+        assertEquals(PARAGRAPH.toString(), Composite.COMPOSITE_PROPERTIES.get(TEXT.toString()));
+        assertEquals(SENTENCE.toString(), Composite.COMPOSITE_PROPERTIES.get(PARAGRAPH.toString()));
     }
 
     @Test
     public void shouldCheckEqualityInputAndOutputParseString() throws Exception {
+        System.out.println(PARAGRAPH.name());
         //GIVEN
         Parser parser = Parser.create();
-        String testString = TextReader.read("text");
+        Composite testCompositeText = CompositeFactory.getCompositeText();
+        String testString = testCompositeText.toPlainString();
         //WHEN
-        Composite text = parser.parse(testString);
+        Composite textComposite = parser.parse(testString);
         //THEN
-        assertEquals(testString, text.toPlainString());
+        assertEquals(testCompositeText, textComposite);
+
+        log.debug("testCompositeText.equals(textComposite) {}", testCompositeText.equals(textComposite));
     }
 }
