@@ -88,4 +88,77 @@ public class Composite extends Component implements Iterable<Component> {
     public Iterator<Component> iterator() {
         return components.iterator();
     }
+    public Iterator<Component> iterator(Type type) {
+        Iterator<Component> iterator = null;
+        log.debug("type {}", type);
+        if (type == Composite.this.getType())
+            throw new IllegalArgumentException("Not valid type");
+        else if (type == WORD) iterator = new FilterIterator();
+        else if (type.toString().equals(COMPOSITE_PROPERTIES.get(Composite.this.getType())))
+            iterator = Composite.this.iterator();
+        else {
+            iterator = new DeepIterator();
+        }
+        return iterator;
+    }
+
+
+    private class CompositeIterator implements Iterator<Component> {
+
+        Deque<Component> stack = new LinkedList<>();
+
+
+        public CompositeIterator() {
+            stack.add(Composite.this);
+        }
+
+        @Override
+        public boolean hasNext() {
+            return !stack.isEmpty();
+        }
+
+        @Override
+        public Component next() {
+            if (stack.isEmpty()) {
+                throw new NoSuchElementException();
+            }
+            Component node = stack.pop();
+            if (node != null) { //only if Composite.children has null
+                if (node instanceof Composite) {
+                    Composite ac = (Composite) node;
+                    for (Component acc : ac.components) {
+                        stack.add(acc);
+                    }
+                }
+            }
+            return node;
+        }
+    }
+
+    private class FilterIterator implements Iterator<Component> {
+
+
+        @Override
+        public boolean hasNext() {
+            return false;
+        }
+
+        @Override
+        public Component next() {
+            return null;
+        }
+    }
+
+    private class DeepIterator implements Iterator<Component> {
+        @Override
+        public boolean hasNext() {
+            return ;
+        }
+
+        @Override
+        public Component next() {
+            return null;
+        }
+    }
+
 }
