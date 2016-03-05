@@ -1,19 +1,19 @@
 package com.epam.msfrolov.textprocessing.model;
 
 import com.epam.msfrolov.textprocessing.util.PropertiesService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.epam.msfrolov.textprocessing.model.Component.Type.TEXT;
+import static com.epam.msfrolov.textprocessing.model.Component.Type.WORD;
 import static com.epam.msfrolov.textprocessing.util.Checker.isNull;
 
 public class Composite extends Component implements Iterable<Component> {
     public static final Map<String, String> COMPOSITE_PROPERTIES = PropertiesService.get("compositeHierarchy.properties");
+    private static final Logger log = LoggerFactory.getLogger(Composite.class);
     private List<Component> components;
-
 
 
     private Composite(Type type) {
@@ -77,21 +77,15 @@ public class Composite extends Component implements Iterable<Component> {
 
     }
 
-    //EXTRA METHODS
-    //
-
-    //ITERATORS:
-
     @Override
     public int hashCode() {
         return components != null ? components.hashCode() : 0;
     }
 
+
+    //ITERATORS:
+
     public Iterator<Component> iterator() {
         return components.iterator();
-    }
-
-    public Iterator<Component> iterator(Type type) {
-        return null;
     }
 }
