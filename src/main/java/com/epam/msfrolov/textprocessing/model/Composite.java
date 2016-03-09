@@ -145,9 +145,11 @@ public class Composite extends Component implements Iterable<Component> {
     }
 
     public Iterator<Component> iterator(Type type) {
-        if (containsSubtype(type))
-            return new TypeIterator(type);
-        else throw new IllegalArgumentException("Selected type is not subtype!");
+        if (containsSubtype(type)) {
+            if (type == getSubCompositeType(Composite.this.getType()))
+                return Composite.this.iterator();
+            else return new TypeIterator(type);
+        } else throw new IllegalArgumentException("Selected type is not subtype!");
     }
 
     private class TypeIterator implements Iterator<Component> {
@@ -181,15 +183,16 @@ public class Composite extends Component implements Iterable<Component> {
         }
     }
 
-    //NOT USED -
-    // TODO Write new iterator
 
-    private class IteratorComponent implements Iterator<Component> {
+    // TODO Write new iterator
+    //NOT USED -
+
+    private class IteratorComponent2 implements Iterator<Component> {
         private Type selectedType;
         private Component nextComponent;
         private Deque<Iterator<Component>> stack = new ArrayDeque<>();
 
-        public IteratorComponent(Type type) {
+        public IteratorComponent2(Type type) {
             selectedType = type;
             stack.addLast(components.iterator());
             if (stack.peekLast().hasNext())
@@ -463,6 +466,84 @@ public class Composite extends Component implements Iterable<Component> {
                 findNextComponent();
             }
             return value;
+        }
+    }
+
+    private class IteratorComponent3 implements Iterator<Component> {
+        Deque<Iterator<Component>> stack = new ArrayDeque<>();
+        Type selectedType;
+        Component nextElement;
+
+        private IteratorComponent3(Type type) {
+            isNull(type);
+            selectedType = type;
+            stack.addLast(Composite.this.components.iterator());
+        }
+
+        @Override
+        public boolean hasNext() {
+            if (nextElement != null) return true;
+            while (!stack.isEmpty()) {
+                Iterator<Component> iterator = stack.peek();
+                if (iterator.hasNext()) {
+                    Component nextComponent = iterator.next();
+                    if (nextComponent.getType() != selectedType) {
+                        if (nextComponent instanceof Composite) stack.addLast(((Composite) nextComponent).iterator());
+                    } else {
+                        nextElement = nextComponent;
+                        return true;
+                    }
+                } else stack.pollLast();
+            }
+            return false;
+        }
+
+        @Override
+        public Component next() {
+            if (hasNext()) {
+                Component currentComponent = nextElement;
+                nextElement = null;
+                return currentComponent;
+            }
+            throw new NoSuchElementException();
+        }
+    }
+
+    private class IteratorComponent implements Iterator<Component> {
+        Deque<Iterator<Component>> stack = new ArrayDeque<>();
+        Iterator<Component> currentIterator;
+        Type currentType;
+
+        public IteratorComponent(Type type) {
+            currentIterator = components.iterator();
+            stack.addLast(currentIterator);
+            currentType = type;
+        }
+
+
+        @Override
+        public boolean hasNext() {
+            while (!stack.isEmpty()) {
+                if (currentIterator.hasNext()) return true;
+                stack.pollLast();
+                currentIterator = stack.peekLast();
+            }
+            return false;
+        }
+
+        @Override
+        public Component next() {
+            if (!hasNext()) throw new NoSuchElementException();
+            Component component = currentIterator.next();
+
+            while ((component).getType() != currentType) {
+                if (component instanceof Composite) {
+                    currentIterator = ((Composite) component).iterator();
+                    stack.addLast(currentIterator);
+                    component = currentIterator.next();
+                }
+            }
+            return component;
         }
     }
 
