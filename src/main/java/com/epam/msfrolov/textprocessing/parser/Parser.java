@@ -21,9 +21,7 @@ public class Parser {
     private Map<Type, List<Type>> typeHierarchy;
 
     private Parser() {
-        log.debug("line before init typeHierarchy");
         this.typeHierarchy = TYPE_HIERARCHY;
-        log.debug("line after init typeHierarchy");
         this.compositeProperties = COMPOSITE_PROPERTIES;
     }
 
@@ -48,7 +46,7 @@ public class Parser {
         return parse(string, TEXT);
     }
 
-    private Composite parse(String string, Type currentType) {
+    public Composite parse(String string, Type currentType) {
         Composite composite = Composite.create(currentType);
         if (currentType == WORD) {
             return composite;
@@ -67,7 +65,6 @@ public class Parser {
                 }
             }
         } else {
-            log.debug("getRegex(currentType) {} currentType {}", getRegex(currentType), currentType);
             String[] strings = string.split(getRegex(currentType));
             Type subType = getSubComposite(currentType);
             for (String componentString : strings)
@@ -84,8 +81,6 @@ public class Parser {
 
     public Type getSubComposite(Type type) {
         Checker.isNull(type);
-        log.debug("type {} and type.toString() {}", type, type.toString());
-        log.debug("compositeProperties.get(type.toString()) {}",compositeProperties.get(type.toString()));
         return Type.valueOf(compositeProperties.get(type.toString()));
     }
 

@@ -1,30 +1,23 @@
 package com.epam.msfrolov.textprocessing.model;
 
 import com.epam.msfrolov.textprocessing.util.PropertiesService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public abstract class Component implements Comparable<Component> {
-   private static final Logger log = LoggerFactory.getLogger(Component.class);
     public static final Map<String, String> REGEX_PROPERTIES = PropertiesService.get("regExType.properties");
     public static final Map<Type, List<Type>> TYPE_HIERARCHY = new HashMap<>();
-   // private static final Map<String, String> TYPE_PROPERTIES = PropertiesService.get("typeHierarchy.properties");
 
     //INIT TYPE HIERARCHY
     static {
-        log.debug("into static init class Component");
         Map<String, String> typeProperties = PropertiesService.get("typeHierarchy.properties");
-        log.debug("typeProperties==null - {}",typeProperties==null);
         for (Map.Entry<String, String> entry : typeProperties.entrySet()) {
-            log.debug("entry.getKey() {}",entry.getKey());
             Type typeKey = Type.valueOf(entry.getKey());
-            log.debug("typeKey {}",typeKey);
             List<Type> typesValue = new ArrayList<>();
-            log.debug("current typeKey {} and typesValue {}", typeKey, entry.getValue());
             String[] strings = entry.getValue().split(",");
-            log.debug("current typeKey {} and typesValue {}", typeKey, Arrays.toString(strings));
             for (String s : strings) {
                 typesValue.add(Type.valueOf(s));
             }
@@ -50,6 +43,12 @@ public abstract class Component implements Comparable<Component> {
     public int compareTo(Component that) {
         return this.toPlainString().compareTo(that.toPlainString());
     }
+
+    @Override
+    public abstract boolean equals(Object o);
+
+    @Override
+    public abstract int hashCode();
 
     public enum Type {
         TEXT,

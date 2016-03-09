@@ -14,7 +14,6 @@ public class ParserTest {
 
     @Test
     public void shouldGiveSubComposite() throws Exception {
-        Parser parser = Parser.create();
         assertEquals(PARAGRAPH.toString(), Composite.COMPOSITE_PROPERTIES.get(TEXT.toString()));
         assertEquals(SENTENCE.toString(), Composite.COMPOSITE_PROPERTIES.get(PARAGRAPH.toString()));
     }
@@ -34,3 +33,17 @@ public class ParserTest {
         log.debug("testCompositeText.equals(textComposite) {}", testCompositeText.equals(textComposite));
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
