@@ -77,7 +77,7 @@ public class Composite extends Component implements Iterable<Component> {
     }
 
 
-    public void replaceComposite(Composite composite){
+    public void replaceComposite(Composite composite) {
         this.clear();
         this.components = composite.components;
     }
@@ -180,6 +180,9 @@ public class Composite extends Component implements Iterable<Component> {
             return iterator.next();
         }
     }
+
+    //NOT USED -
+    // TODO Write new iterator
 
     private class IteratorComponent implements Iterator<Component> {
         private Type selectedType;
@@ -463,5 +466,5 @@ public class Composite extends Component implements Iterable<Component> {
         }
     }
 
-
+    //NOT USED -
 }

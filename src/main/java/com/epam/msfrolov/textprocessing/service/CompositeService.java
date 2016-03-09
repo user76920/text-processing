@@ -58,7 +58,7 @@ public class CompositeService {
             composite.replaceComposite(substringComposite);
             counter++;
         }
-        log.debug("Text: {}",text.toPlainString());
+        log.debug("Text: {}", text.toPlainString());
         return counter;
     }
 
