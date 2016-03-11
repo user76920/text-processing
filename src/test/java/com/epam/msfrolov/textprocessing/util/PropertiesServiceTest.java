@@ -14,12 +14,12 @@ public class PropertiesServiceTest {
 
     @Test
     public void testGetRegEx() throws Exception {
-        Map<String, String> propertiesService = PropertiesService.get("regExType.properties");
+        Map<String, String> propertiesService = PropertiesService.get("regex.type.properties");
         for (Map.Entry<String, String> x : propertiesService.entrySet()) {
             log.debug("KEY {} VALUE {}", x.getKey(), x.getValue());
         }
         assertEquals(propertiesService.get(LETTER.toString()), "([-_])");
-        assertEquals(propertiesService.get(PUNCTUATION.toString()), "([.!?,:\"';()[]{}])");
+        assertEquals(propertiesService.get(PUNCTUATION.toString()), "([.!?,:\"';()\\[\\]\\{\\}])");
         assertEquals(propertiesService.get(WORD.toString()), "([A-Za-zА-Яа-яЁё0-9-_])");
     }
 }

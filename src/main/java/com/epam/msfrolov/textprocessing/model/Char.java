@@ -14,7 +14,7 @@ public class Char extends Component {
     private static final Map<String, List<Component>> TYPE_LETTERS_PROPERTIES = new HashMap<>();
 
     static {
-        Map<String, String> properties = PropertiesService.get("typeLetters.properties");
+        Map<String, String> properties = PropertiesService.get("type.letters.properties");
         for (Map.Entry<String, String> entry : properties.entrySet()) {
             String key = entry.getKey();
             List<Component> value = new ArrayList<>();

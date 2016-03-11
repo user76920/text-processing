@@ -8,12 +8,12 @@ import java.util.List;
 import java.util.Map;
 
 public abstract class Component implements Comparable<Component> {
-    public static final Map<String, String> REGEX_PROPERTIES = PropertiesService.get("regExType.properties");
+    public static final Map<String, String> REGEX_PROPERTIES = PropertiesService.get("regex.type.properties");
     public static final Map<Type, List<Type>> TYPE_HIERARCHY = new HashMap<>();
 
     //INIT TYPE HIERARCHY
     static {
-        Map<String, String> typeProperties = PropertiesService.get("typeHierarchy.properties");
+        Map<String, String> typeProperties = PropertiesService.get("type.hierarchy.properties");
         for (Map.Entry<String, String> entry : typeProperties.entrySet()) {
             Type typeKey = Type.valueOf(entry.getKey());
             List<Type> typesValue = new ArrayList<>();
